@@ -20,6 +20,9 @@ app.use(cors());
 app.get('/login-register', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'login-register.html'));
 });
+app.get('/Home', (req, res) => {
+    res.sendFile(path.join(__dirname, 'templates', 'Home.html'));
+});
 
 const PORT = process.env.PORT || 3000;
 
