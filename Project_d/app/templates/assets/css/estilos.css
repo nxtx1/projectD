@@ -32,6 +32,7 @@ main{
     width: 100%;
     padding: 10px 20px;
     display: flex;
+    border-radius: 5px;
     justify-content: center;
     backdrop-filter: blur(10px);
     background-color: rgba(248, 248, 248, 0.5);
