@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publicación de Vehículos - Royal Cars</title>
+    <!-- Aquí puedes agregar el enlace a tu archivo CSS -->
+</head>
+<body>
+
+    <!-- Cabecera -->
+    <header>
+        <div class="contact-info">
+            <span>📞 +012 345 6789</span> | <span>✉️ info@example.com</span>
+        </div>
+        <nav>
+            <div class="logo">ROYAL CARS</div>
+            <ul class="menu">
+                <li><a href="#">HOME</a></li>
+                <li><a href="#">ABOUT</a></li>
+                <li><a href="#">SERVICE</a></li>
+                <li><a href="#">CARS</a></li>
+                <li><a href="#">PAGES</a></li>
+                <li><a href="#">CONTACT</a></li>
+            </ul>
+            <div class="auth">
+                <button>Iniciar Sesión</button>
+                <button id="logoutButton">Cerrar Sesión</button>
+            </div>
+        </nav>
+    </header>
+
+   <!-- Sección de publicación de vehículos -->
+<section class="publish-vehicle">
+    <h1>Publicar un Vehículo</h1>
+
+    <!-- Formulario para la publicación -->
+    <form action="/ruta-de-tu-api" method="POST">
+        <div class="input-group">
+            <label for="id-vehiculo">ID del Vehículo:</label>
+            <input type="text" id="id-vehiculo" name="idVehiculo" required>
+        </div>
+
+        <div class="input-group">
+            <label for="color">Color:</label>
+            <input type="text" id="color" name="color" required>
+        </div>
+
+        <div class="input-group">
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+        </div>
+
+        <div class="input-group">
+            <label for="kilometraje">Kilometraje:</label>
+            <input type="number" id="kilometraje" name="kilometraje" required>
+        </div>
+
+        <div class="input-group">
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" name="precio" required>
+        </div>
+
+        <div class="input-group">
+            <label for="version">Versión:</label>
+            <input type="text" id="version" name="version" required>
+        </div>
+
+        <div class="input-group">
+            <label for="ano">Año:</label>
+            <input type="number" id="ano" name="ano" required>
+        </div>
+
+        <div class="input-group">
+            <label for="usuario-id">ID del Usuario:</label>
+            <input type="text" id="usuario-id" name="usuarioId" required>
+        </div>
+
+        <div class="input-group">
+            <label for="modelo-id">ID del Modelo:</label>
+            <input type="text" id="modelo-id" name="modeloId" required>
+        </div>
+
+        <div class="input-group">
+            <label for="marca-id">ID de la Marca:</label>
+            <input type="text" id="marca-id" name="marcaId" required>
+        </div>
+
+        <div class="input-group">
+            <label for="comuna-id">ID de la Comuna:</label>
+            <input type="text" id="comuna-id" name="comunaId" required>
+            <div class="input-group">
+                <label for="vehicle-image">Imagen del Vehículo:</label>
+                <input type="file" id="vehicle-image" name="vehicleImage" accept="image/*" required>
+            </div>
+        </div>
+
+        <button type="submit">Publicar Vehículo</button>
+    </form>
+</section>
+
+    <!-- Aquí puedes agregar el footer y otras secciones adicionales si lo deseas -->
+<script src="assets/js/usuario.js"></script>
+</body>
+</html>
