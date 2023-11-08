@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Agendar Mantención</title>
+    <!-- Asegúrate de incluir aquí tus hojas de estilo y scripts si es necesario -->
+</head>
+<body>
+
+    <h1>Agendar Mantención</h1>
+    
+    <!-- El formulario para agendar la mantención -->
+    <form id="mantencionForm" action="/crear-mantencion" method="post">
+        <div>
+            <label for="fecha_mantencion">Fecha de Mantención:</label>
+            <input type="date" id="fecha_mantencion" name="fecha_mantencion" required>
+        </div>
+        <div>
+            <label for="vehiculo_id_vehiculo">Selecciona tu Vehículo:</label>
+            <select id="vehiculo_id_vehiculo" name="vehiculo_id_vehiculo" required>
+                <!-- Opciones de vehículos cargadas desde la base de datos -->
+                <!-- Asumiendo que se cargarán las opciones mediante JavaScript o desde el backend -->
+            </select>
+        </div>
+        <div>
+            <button type="submit">Agendar Mantención</button>
+        </div>
+    </form>
+
+    <script>
+      // Esperar a que el contenido del DOM se cargue antes de realizar acciones
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          // Realizar una solicitud GET para obtener los vehículos
+          const response = await fetch('/obtener-vehiculos', {
+            method: 'GET',
+            credentials: 'include' // Necesario para incluir las cookies (que podrían contener el token JWT)
+          });
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const vehiculos = await response.json();
+          // Obtener la referencia del select en el formulario
+          const selectVehiculo = document.getElementById('vehiculo_id_vehiculo');
+      
+          // Limpiar las opciones existentes
+          selectVehiculo.innerHTML = '';
+      
+          // Añadir una opción por defecto
+          selectVehiculo.add(new Option('Seleccione su vehículo', ''));
+      
+          // Iterar sobre los vehículos y añadirlos como opciones al select
+          vehiculos.forEach(vehiculo => {
+            selectVehiculo.add(new Option(vehiculo.descripcion, vehiculo.id_vehiculo));
+          });
+        } catch (error) {
+          console.error('Error al cargar los vehículos:', userId);
+        }
+      });
+      </script>
+</body>
+</html>

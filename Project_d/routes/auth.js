@@ -116,7 +116,9 @@ router.get('/status', verifyToken, async (req, res) => {
         return res.status(500).json({ loggedIn: false, message: 'An error occurred', error });
     }
 });
+
 module.exports = {
     router: router,
-    verifyToken: verifyToken
+    verifyToken: verifyToken,
+    pool
 };
