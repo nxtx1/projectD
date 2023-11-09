@@ -28,6 +28,15 @@ app.get('/', (req, res) => {
 });
 
 
+app.get('/aaa', (req, res) => {
+    res.sendFile(path.join(__dirname, 'templates', 'aaa.html'));
+});
+
+app.get('/sss', (req, res) => {
+    res.sendFile(path.join(__dirname, 'templates', 'sss.html'));
+});
+
+
 // Ejemplo de uso del middleware para una ruta que requiere autenticación
 app.get('/create-post', authModule.verifyToken, (req, res) => {
     // Solo los usuarios autenticados pueden acceder aquí

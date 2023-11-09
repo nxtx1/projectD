@@ -35,10 +35,9 @@
     <h1>Publicar un Vehículo</h1>
 
     <!-- Formulario para la publicación -->
-    <form action="/ruta-de-tu-api" method="POST">
+    <form action="/create-post" method="POST">
         <div class="input-group">
-            <label for="id-vehiculo">ID del Vehículo:</label>
-            <input type="text" id="id-vehiculo" name="idVehiculo" required>
+            <input type="hidden" id="id-vehiculo" name="idVehiculo">
         </div>
 
         <div class="input-group">
@@ -85,10 +84,23 @@
             <label for="marca-id">ID de la Marca:</label>
             <input type="text" id="marca-id" name="marcaId" required>
         </div>
+        <!-- ... -->
+
+        
 
         <div class="input-group">
-            <label for="comuna-id">ID de la Comuna:</label>
-            <input type="text" id="comuna-id" name="comunaId" required>
+<!-- ... -->
+<div class="input-group">
+    <label for="region-id">Región:</label>
+    <select id="region-id" name="regionId" required></select>
+</div>
+
+<div class="input-group">
+    <label for="comuna-id">Comuna:</label>
+    <select id="comuna-id" name="comunaId" required></select>
+</div>
+<!-- ... -->
+
             <div class="input-group">
                 <label for="vehicle-image">Imagen del Vehículo:</label>
                 <input type="file" id="vehicle-image" name="vehicleImage" accept="image/*" required>
@@ -101,5 +113,6 @@
 
     <!-- Aquí puedes agregar el footer y otras secciones adicionales si lo deseas -->
 <script src="assets/js/usuario.js"></script>
+<script src="assets/js/publicarvehiculo.js"></script>
 </body>
 </html>
