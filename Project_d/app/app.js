@@ -35,6 +35,9 @@ app.get('/aaa', (req, res) => {
 app.get('/sss', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'sss.html'));
 });
+app.get('/autos', (req, res) => {
+    res.sendFile(path.join(__dirname, 'templates', 'autos.html'));
+});
 
 
 // Ejemplo de uso del middleware para una ruta que requiere autenticación
