@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+body{
+    font-family: 'Oswald';
+    background: #ffe6fc;
+}
+
+.imagen_usuario{
+    width: 70px;
+    
+}
+
+.dropdown-menu--lg{
+    min-width: 18rem;
+    padding: 0px;
+    border-radius: 10px;
+}
+
+
+.dropdown-menu__header {
+   background-attachment: #ef5299;
+   border-radius: 10px 10px 0px 0px;
+   padding: 10px;
+}
+.dropdown-menu__header img{
+    width: 50px;
+}
+
+.dropdrown-menu__username{
+    color: white;
+}

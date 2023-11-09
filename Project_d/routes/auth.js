@@ -117,6 +117,48 @@ router.get('/status', verifyToken, async (req, res) => {
     }
 });
 
+<<<<<<< Updated upstream
+=======
+router.post('/create-post', (req, res) => {
+    const userId = req.body.usuarioId;
+    const vehicleId = req.body.idVehiculo;
+    
+    // Busca en tu base de datos si existe una publicación similar
+    const existingPost = findPostByUserIdAndVehicleId(userId, vehicleId);
+    
+    if (existingPost) {
+        // Si existe una publicación similar, envía una respuesta de error
+        res.status(400).send('Ya existe una publicación similar.');
+    } else {
+        // Si no existe, puedes proceder a crear una nueva publicación
+        createNewPost(req.body);
+        res.status(200).send('Publicación creada exitosamente.');
+    }
+});
+
+
+
+// Obtener todas las regiones
+router.get('/regiones', async (req, res) => {
+    try {
+        const [regiones] = await pool.query('SELECT * FROM region');
+        res.json(regiones);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener las regiones', error });
+    }
+});
+
+// Obtener comunas por ID de región
+router.get('/comunas/:regionId', async (req, res) => {
+    const { regionId } = req.params;
+    try {
+        const [comunas] = await pool.query('SELECT * FROM comuna WHERE region_id_region = ?', [regionId]);
+        res.json(comunas);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener las comunas', error });
+    }
+});
+>>>>>>> Stashed changes
 module.exports = {
     router: router,
     verifyToken: verifyToken,
