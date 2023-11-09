@@ -117,8 +117,6 @@ router.get('/status', verifyToken, async (req, res) => {
     }
 });
 
-<<<<<<< Updated upstream
-=======
 router.post('/create-post', (req, res) => {
     const userId = req.body.usuarioId;
     const vehicleId = req.body.idVehiculo;
@@ -158,7 +156,6 @@ router.get('/comunas/:regionId', async (req, res) => {
         res.status(500).json({ message: 'Error al obtener las comunas', error });
     }
 });
->>>>>>> Stashed changes
 module.exports = {
     router: router,
     verifyToken: verifyToken,

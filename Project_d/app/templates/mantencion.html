@@ -2,33 +2,50 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendar Mantención</title>
-    <!-- Asegúrate de incluir aquí tus hojas de estilo y scripts si es necesario -->
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <!-- Hoja de estilo personalizada -->
+    <link rel="stylesheet" href="assets/css/cssmantencion.css">
 </head>
 <body>
 
-    <h1>Agendar Mantención</h1>
-    
-    <!-- El formulario para agendar la mantención -->
-    <form id="mantencionForm" action="/crear-mantencion" method="post">
-        <div>
-          <label for="fecha_mantencion">Hora de Mantención:</label>
-          <select id="fecha_mantencion" name="fecha_mantencion" required>
-            <!-- Las opciones de horas se cargarán desde el backend o con JavaScript -->
-          </select>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Agendar Mantención</h2>
+                </div>
+                <div class="card-body">
+                    <!-- El formulario para agendar la mantención -->
+                    <form id="mantencionForm" action="/crear-mantencion" method="post">
+                        <div class="mb-3">
+                            <label for="fecha_mantencion" class="form-label">Hora de Mantención:</label>
+                            <select id="fecha_mantencion" name="fecha_mantencion" class="form-select" required>
+                                <!-- Las opciones de horas se cargarán desde el backend o con JavaScript -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="vehiculo_id_vehiculo" class="form-label">Selecciona tu Vehículo:</label>
+                            <select id="vehiculo_id_vehiculo" name="vehiculo_id_vehiculo" class="form-select" required>
+                                <!-- Opciones de vehículos cargadas desde la base de datos -->
+                            </select>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Agendar Mantención</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div>
-            <label for="vehiculo_id_vehiculo">Selecciona tu Vehículo:</label>
-            <select id="vehiculo_id_vehiculo" name="vehiculo_id_vehiculo" required>
-                <!-- Opciones de vehículos cargadas desde la base de datos -->
-                <!-- Asumiendo que se cargarán las opciones mediante JavaScript o desde el backend -->
-            </select>
-        </div>
-        <div>
-            <button type="submit">Agendar Mantención</button>
-        </div>
-    </form>
-    <script src="assets/js/obtenerVehiculos.js"></script> 
-    <script src="assets/js/horasFechas.js"></script> 
+    </div>
+</div>
+
+<script src="assets/js/obtenerVehiculos.js"></script> 
+<script src="assets/js/horasFechas.js"></script> 
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
