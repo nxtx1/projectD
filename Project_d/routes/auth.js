@@ -10,7 +10,8 @@ const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'project_d'
+    database: 'project_d',
+    port: 3308
 });
 
 // Función de validación para la contraseña
