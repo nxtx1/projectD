@@ -55,7 +55,14 @@ app.get('/obtener-vehiculos', authModule.verifyToken, async (req, res) => {
     const userId = req.user.id;
 
     try {
-        const [results] = await pool.query('SELECT * FROM vehiculo WHERE usuario_id_usuario = ?', [userId]);
+        const [results] = await pool.query(`
+        SELECT 
+          mo.modelo,
+          m.marca
+        FROM vehiculo v
+        JOIN modelo mo ON v.modelo_id = mo.id_modelo
+        JOIN marca m ON v.marca_id = m.id_marca
+        WHERE usuario_id_usuario = ?`, [userId]);
         console.log('Vehículos obtenidos para el usuario:', userId);
         res.json(results);
     } catch (error) {

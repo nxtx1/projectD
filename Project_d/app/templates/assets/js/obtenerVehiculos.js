@@ -21,9 +21,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Iterar sobre los vehículos y añadirlos como opciones al select
     vehiculos.forEach(vehiculo => {
-      selectVehiculo.add(new Option(vehiculo.descripcion, vehiculo.id_vehiculo));
+      const textoOpcion = vehiculo.marca + ' ' + vehiculo.modelo;
+  
+      // Crea una nueva opción con el texto combinado y el id del vehículo
+      selectVehiculo.add(new Option(textoOpcion, vehiculo.id_vehiculo));
     });
   } catch (error) {
     console.error('Error al cargar los vehículos:', userId);
   }
 });
+
