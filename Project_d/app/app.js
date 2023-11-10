@@ -63,6 +63,82 @@ app.get('/obtener-vehiculos', authModule.verifyToken, async (req, res) => {
         res.status(500).send('Error al obtener los vehículos');
     }
 });
+app.get('/api/vehiculos/:id', async (req, res) => {
+    try {
+      const vehiculoId = req.params.id;
+      const [vehiculos] = await pool.query(`
+      SELECT 
+        v.id_vehiculo,
+        v.foto,
+        v.ano,
+        v.kilometraje,
+        v.precio,
+        v.transmision,
+        mo.modelo,
+        m.marca
+      FROM vehiculo v
+      JOIN modelo mo ON v.modelo_id = mo.id_modelo
+      JOIN marca m ON v.marca_id = m.id_marca
+      WHERE v.id_vehiculo = ?`, [vehiculoId]);
+  
+      if (vehiculos.length === 0) {
+        return res.status(404).send('Vehículo no encontrado');
+      }
+  
+      // Suponiendo que 'foto' es un campo BLOB en la base de datos
+      const vehiculo = vehiculos[0];
+      if (vehiculo.foto) {
+        // Convertir el BLOB a una cadena base64
+        vehiculo.foto = Buffer.from(vehiculo.foto).toString('base64');
+        vehiculo.foto = `data:image/jpeg;base64,${vehiculo.foto}`; // Añadir el prefijo necesario para el Data-URI
+      }
+  
+      res.json(vehiculo);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error en el servidor' });
+    }
+  });
+  
+  
+app.get('/vehiculo/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, 'templates', 'detalle-vehiculo.html'));
+  });
+  
+// Ruta para obtener la información de los vehículos
+app.get('/api/vehiculos', async (req, res) => {
+    try {
+      const query = `
+        SELECT 
+          v.id_vehiculo,
+          v.ano,
+          v.kilometraje,
+          v.precio,
+          v.transmision,
+          v.foto,
+          m.modelo,
+          ma.marca
+        FROM vehiculo v
+        JOIN modelo m ON v.modelo_id = m.id_modelo
+        JOIN marca ma ON v.marca_id = ma.id_marca`;
+  
+      const [vehiculos] = await pool.query(query);
+      // Convertir la foto BLOB a una cadena base64 para cada vehículo
+      const vehiculosConFotoBase64 = vehiculos.map(vehiculo => {
+        return {
+          ...vehiculo,
+          foto: vehiculo.foto ? Buffer.from(vehiculo.foto).toString('base64') : null
+        };
+      });
+      
+      res.json(vehiculosConFotoBase64);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error al obtener los vehículos de la base de datos');
+    }
+  });
+
+
 app.post('/crear-mantencion', authModule.verifyToken, async (req, res) => {
     // req.body contendrá los datos enviados desde el formulario
     console.log(req.body);
@@ -84,6 +160,7 @@ app.post('/crear-mantencion', authModule.verifyToken, async (req, res) => {
       res.status(500).json({ message: 'No se pudo agendar la mantención', error });
     }
   });
+
 
 const PORT = process.env.PORT || 3000;
 

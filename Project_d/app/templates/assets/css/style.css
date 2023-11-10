@@ -314,3 +314,9 @@ h6,
     background-attachment: fixed;
 }
 
+.rent-item img {
+    width: 100%; /* Esto hace que la imagen ocupe todo el ancho del contenedor .rent-item */
+    height: 200px; /* Establece una altura fija para todas las imágenes */
+    object-fit: cover; /* Esto asegura que la imagen cubra completamente el espacio asignado sin distorsionarse */
+  }
+  
