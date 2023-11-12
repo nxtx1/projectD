@@ -9,26 +9,34 @@
 <body>
 
     <!-- Contenedor Principal -->
-    <div class="container vehiculo-detalle">
-        <h1 id="nombre-vehiculo">Nombre del Vehículo</h1>
-        
-        <!-- Imagen del Vehículo -->
-        <img id="imagen-vehiculo" src="" alt="Imagen del Vehículo" />
+<!-- Contenedor Principal -->
+<div class="container vehiculo-detalle">
+    <h1 id="nombre-vehiculo">Nombre del Vehículo</h1>
 
-        <!-- Información del Vehículo -->
-        <div id="info-vehiculo">
+    <!-- Flex Container for Image and Details -->
+    <div class="flex-container">
+        <!-- Image Container -->
+        <div class="image-container">
+            <img id="imagen-vehiculo" src="" alt="Imagen del Vehículo" />
+        </div>
+        
+        <!-- Details Container -->
+        <div class="details-container">
+            <h1>Características del Vehículo</h1>
             <p><strong>Modelo:</strong> <span id="modelo-vehiculo"></span></p>
             <p><strong>Año:</strong> <span id="ano-vehiculo"></span></p>
             <p><strong>Transmisión:</strong> <span id="transmision-vehiculo"></span></p>
             <p><strong>Kilometraje:</strong> <span id="kilometraje-vehiculo"></span></p>
+            <p><strong>Combustible:</strong> <span id="gasolina-vehiculo"></span></p>
             <p><strong>Precio:</strong> <span id="precio-vehiculo"></span></p>
+            <h2>Descripción</h2>
+            <p><span id="descripcion-vehiculo"></span></p>
         </div>
-
-        <!-- Botón de Reserva o Acción -->
-        <a id="reserva-vehiculo" class="btn btn-primary" href="#">Comprar!</a>
     </div>
+</div>
+
+    
 
     <script src="/assets/js/detalleVehiculo.js"></script>
     
 </body>
-</html>

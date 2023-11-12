@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Iterar sobre los vehículos y añadirlos como opciones al select
     vehiculos.forEach(vehiculo => {
-      const textoOpcion = vehiculo.marca + ' ' + vehiculo.modelo;
+      const textoOpcion = vehiculo.marca + ' ' + vehiculo.modelo + ' ' + vehiculo.ano;
   
       // Crea una nueva opción con el texto combinado y el id del vehículo
       selectVehiculo.add(new Option(textoOpcion, vehiculo.id_vehiculo));

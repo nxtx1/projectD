@@ -10,7 +10,7 @@ const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'project_d'
+    database: 'awa'
 });
 
 // Función de validación para la contraseña
@@ -52,11 +52,11 @@ router.post('/register', async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(contrasena, salt);
-   
+    const roledefecto = 0
     try {
         await pool.query(
-            'INSERT INTO usuario (nombre_usuario, correo, contrasena) VALUES (?, ?, ?)',
-            [nombre_usuario, correo, hashedPassword]
+            'INSERT INTO usuario (nombre_usuario, correo, contrasena, rol) VALUES (?, ?, ?, ?)',
+            [nombre_usuario, correo, hashedPassword, roledefecto]
         );
         res.status(201).json({ message: 'User registered' });
     } catch (error) {
@@ -69,7 +69,7 @@ router.post('/login', async (req, res) => {
 
     try {
         const [results] = await pool.query(
-            'SELECT id_usuario, contrasena FROM usuario WHERE correo = ?',
+            'SELECT id_usuario, contrasena, rol FROM usuario WHERE correo = ?',
             [correo]
         );
 
@@ -85,10 +85,10 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Incorrect password' });
         }
 
-        const token = jwt.sign({ id: user.id_usuario }, process.env.SECRET_KEY, {
+        const token = jwt.sign({ id: user.id_usuario, rol: user.rol }, process.env.SECRET_KEY, {
             expiresIn: '1h'
         });
-
+        console.log(user.rol);
         res.cookie('token', token, { httpOnly: true });
         res.status(200).json({ message: 'Logged in' });
     } catch (error) {

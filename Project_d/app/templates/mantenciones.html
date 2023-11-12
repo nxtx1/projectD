@@ -1,0 +1,31 @@
+<link href="/assets/css/modal.css" rel="stylesheet">
+<table id="tabla-mantenciones">
+    <thead>
+      <tr>
+        <th id="id-mantencion">ID</th>
+        <th>Fecha</th>
+        <th>Nombre</th>
+        <th>Marca</th>
+        <th>Modelo</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Las filas se llenarán dinámicamente con JavaScript -->
+    </tbody>
+  </table>
+  <div id="modalCambioEstado" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Cambiar Estado de Mantención</h2>
+      <select id="estadoMantencion">
+        <option value="completado">Completado</option>
+        <option value="cancelado">Cancelado</option>
+        <option value="no_asistido">No Asistido</option>
+        <!-- Más estados si son necesarios -->
+      </select>
+      <button id="guardarEstado">Guardar</button>
+    </div>
+  </div>
+  <script src="/assets/js/editarMantencion.js"></script>

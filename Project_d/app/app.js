@@ -31,14 +31,21 @@ app.get('/', (req, res) => {
 app.get('/aaa', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'aaa.html'));
 });
-
+app.get('/mantenciones', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'mantenciones.html'));
+});
+app.get('/modal', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'modal.html'));
+});
 app.get('/sss', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'sss.html'));
 });
 app.get('/autos', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'autos.html'));
 });
-
+app.get('/htmlnuevo', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'htmlnuevo.html'));
+});
 
 // Ejemplo de uso del middleware para una ruta que requiere autenticación
 app.get('/create-post', authModule.verifyToken, (req, res) => {
@@ -57,13 +64,13 @@ app.get('/obtener-vehiculos', authModule.verifyToken, async (req, res) => {
     try {
       const [results] = await pool.query(`
       SELECT 
-      v.*,
-      mo.modelo,
-      m.marca
-    FROM vehiculo v
-    JOIN modelo mo ON v.modelo_id = mo.id_modelo
-    JOIN marca m ON v.marca_id = m.id_marca
-    WHERE usuario_id_usuario = ?`, [userId]);
+        v.*, 
+        m.marca,
+        mo.modelo
+      FROM vehiculo v 
+      JOIN modelo mo ON v.modelo_id_modelo = mo.id_modelo
+      JOIN marca m ON mo.marca_id_marca = m.id_marca
+      WHERE usuario_id_usuario = ?;`, [userId]);
         console.log('Vehículos obtenidos para el usuario:', userId);
         res.json(results);
     } catch (error) {
@@ -82,11 +89,12 @@ app.get('/api/vehiculos/:id', async (req, res) => {
         v.kilometraje,
         v.precio,
         v.transmision,
+        v.descripcion,
         mo.modelo,
         m.marca
       FROM vehiculo v
-      JOIN modelo mo ON v.modelo_id = mo.id_modelo
-      JOIN marca m ON v.marca_id = m.id_marca
+      JOIN modelo mo ON v.modelo_id_modelo= mo.id_modelo
+      JOIN marca m ON mo.marca_id_marca = m.id_marca
       WHERE v.id_vehiculo = ?`, [vehiculoId]);
   
       if (vehiculos.length === 0) {
@@ -117,18 +125,18 @@ app.get('/vehiculo/:id', (req, res) => {
 app.get('/api/vehiculos', async (req, res) => {
     try {
       const query = `
-        SELECT 
-          v.id_vehiculo,
-          v.ano,
-          v.kilometraje,
-          v.precio,
-          v.transmision,
-          v.foto,
-          m.modelo,
-          ma.marca
-        FROM vehiculo v
-        JOIN modelo m ON v.modelo_id = m.id_modelo
-        JOIN marca ma ON v.marca_id = ma.id_marca`;
+      SELECT 
+      v.id_vehiculo,
+      v.ano,
+      v.kilometraje,
+      v.precio,
+      v.transmision,
+      v.foto,
+      m.modelo,
+      ma.marca
+    FROM vehiculo v
+    JOIN modelo m ON v.modelo_id_modelo = m.id_modelo
+    JOIN marca ma ON m.marca_id_marca = ma.id_marca`;
   
       const [vehiculos] = await pool.query(query);
       // Convertir la foto BLOB a una cadena base64 para cada vehículo
@@ -154,11 +162,12 @@ app.post('/crear-mantencion', authModule.verifyToken, async (req, res) => {
     const userId = req.user.id;
     console.log('usuario que agendará mantención:', userId);
     console.log(fecha_mantencion, vehiculo_id_vehiculo, userId);
+    const estadodefecto = 'programado'
     try {
       // Aquí insertas los datos en la base de datos
       const result = await pool.query(
-        'INSERT INTO mantencion (fecha_mantencion, usuario_id_usuario, vehiculo_id_vehiculo) VALUES (?, ?, ?)',
-        [fecha_mantencion, userId, vehiculo_id_vehiculo]
+        'INSERT INTO mantencion (fecha_mantencion, usuario_id_usuario, vehiculo_id_vehiculo, estado) VALUES (?, ?, ?, ?)',
+        [fecha_mantencion, userId, vehiculo_id_vehiculo, estadodefecto]
       );
       
       // Si todo va bien, enviar una confirmación al cliente
@@ -169,6 +178,75 @@ app.post('/crear-mantencion', authModule.verifyToken, async (req, res) => {
     }
   });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function verificarRolesPermitidos(req, res, next) {
+  // Asumiendo que los roles permitidos para realizar la acción son mecánico y administrador
+  const rolesPermitidos = [1, 2]; // Array de IDs de roles permitidos
+
+  if (req.user && rolesPermitidos.includes(req.user.rol)) {
+    next(); // El usuario tiene un rol permitido, puede continuar
+  } else {
+    res.status(403).json({ mensaje: 'No tiene permisos para realizar esta acción' });
+  }
+}
+
+
+app.get('/api/mantenciones', authModule.verifyToken, verificarRolesPermitidos, async (req, res) => {
+  try {
+    const query = `SELECT 
+    m.id_mantencion, 
+      m.fecha_mantencion, 
+      m.estado,
+      u.nombre_usuario,
+      ma.marca,
+      mo.modelo
+  FROM mantencion m 
+  JOIN usuario u ON m.usuario_id_usuario = u.id_usuario 
+  JOIN vehiculo v on m.vehiculo_id_vehiculo = v.id_vehiculo 
+  JOIN modelo mo ON v.modelo_id_modelo = mo.id_modelo 
+  JOIN marca ma ON mo.marca_id_marca = ma.id_marca 
+  ORDER BY fecha_mantencion;`
+    const [mantenciones] = await pool.query(query);
+    res.json(mantenciones);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al obtener las mantenciones');
+  }
+});
+
+app.post('/api/mantenciones/:id/cambiar-estado', authModule.verifyToken, verificarRolesPermitidos, async (req, res) => {
+  const idMantencion = req.params.id;
+  const { estado } = req.body; // El nuevo estado viene en el cuerpo de la solicitud
+
+  try {
+    // Validar el nuevo estado - asegúrate de que es un estado válido
+
+    // Actualizar el estado de la mantención en la base de datos
+    await pool.query('UPDATE mantencion SET estado = ? WHERE id_mantencion = ?', [estado, idMantencion]);
+
+    // Si todo salió bien, enviar una respuesta de éxito
+    res.send('Estado de la mantención actualizado correctamente.');
+  } catch (error) {
+    // En caso de error, enviar una respuesta de error
+    console.error('Error al cambiar el estado de la mantención:', error);
+    res.status(500).send('Error en el servidor al actualizar el estado de la mantención.');
+  }
+});
 
 const PORT = process.env.PORT || 3000;
 
