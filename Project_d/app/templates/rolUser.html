@@ -1,0 +1,29 @@
+<link href="/assets/css/modal.css" rel="stylesheet">
+<table id="tabla-rol">
+    <thead>
+      <tr>
+        <th id="id-usuario">ID</th>
+        <th>Nombre</th>
+        <th>Correo</th>
+        <th>Rol</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Las filas se llenarán dinámicamente con JavaScript -->
+    </tbody>
+  </table>
+  <div id="modalCambioRol" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Cambiar Estado de Mantención</h2>
+      <select id="estadoRol">
+        <option value="0">Usuario</option>
+        <option value="1">Mecánico</option>
+        <option value="2">Administrador</option>
+        <!-- Más estados si son necesarios -->
+      </select>
+      <button id="guardarEstado">Guardar</button>
+    </div>
+  </div>
+  <script src="/assets/js/editarRol.js"></script>

@@ -31,9 +31,7 @@ app.get('/', (req, res) => {
 app.get('/aaa', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'aaa.html'));
 });
-app.get('/mantenciones', (req, res) => {
-  res.sendFile(path.join(__dirname, 'templates', 'mantenciones.html'));
-});
+
 app.get('/modal', (req, res) => {
   res.sendFile(path.join(__dirname, 'templates', 'modal.html'));
 });
@@ -56,6 +54,18 @@ app.get('/mantencion', authModule.verifyToken, (req, res) => {
     // Solo los usuarios autenticados pueden acceder aquí
     res.sendFile(path.join(__dirname, 'templates', 'mantencion.html'));
 });
+
+app.get('/mantenciones', authModule.verifyToken, verificarRolesPermitidos, (req, res) => {
+  // Solo los usuarios autenticados pueden acceder aquí
+  res.sendFile(path.join(__dirname, 'templates', 'mantenciones.html'));
+});
+
+app.get('/rolUser', authModule.verifyToken, verificarRolesPermitidos, (req, res) => {
+  // Solo los usuarios autenticados pueden acceder aquí
+  res.sendFile(path.join(__dirname, 'templates', 'rolUser.html'));
+});
+
+
 
 app.get('/obtener-vehiculos', authModule.verifyToken, async (req, res) => {
     console.log('Ruta /obtener-vehiculos golpeada');
@@ -165,6 +175,7 @@ app.post('/crear-mantencion', authModule.verifyToken, async (req, res) => {
     const estadodefecto = 'programado'
     try {
       // Aquí insertas los datos en la base de datos
+      const fechaMySQL = new Date(fecha_mantencion).toISOString().slice(0, 19).replace('T', ' ');
       const result = await pool.query(
         'INSERT INTO mantencion (fecha_mantencion, usuario_id_usuario, vehiculo_id_vehiculo, estado) VALUES (?, ?, ?, ?)',
         [fecha_mantencion, userId, vehiculo_id_vehiculo, estadodefecto]
@@ -247,6 +258,75 @@ app.post('/api/mantenciones/:id/cambiar-estado', authModule.verifyToken, verific
     res.status(500).send('Error en el servidor al actualizar el estado de la mantención.');
   }
 });
+
+app.get('/api/rol', authModule.verifyToken, verificarRolesPermitidos, async (req, res) => {
+  try {
+    const query = `SELECT * FROM usuario;`
+    const [rol] = await pool.query(query);
+    res.json(rol);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al obtener los roles');
+  }
+});
+
+app.post('/api/roles/:id/cambiar-estado', authModule.verifyToken, verificarRolesPermitidos, async (req, res) => {
+  const idUsuario = req.params.id;
+  const { estado } = req.body; // El nuevo estado viene en el cuerpo de la solicitud
+
+  try {
+    // Validar el nuevo estado - asegúrate de que es un estado válido
+
+    // Actualizar el estado de la mantención en la base de datos
+    await pool.query('UPDATE usuario SET rol = ? WHERE id_usuario = ?', [estado, idUsuario]);
+
+    // Si todo salió bien, enviar una respuesta de éxito
+    res.send('Estado de la mantención actualizado correctamente.');
+  } catch (error) {
+    // En caso de error, enviar una respuesta de error
+    console.error('Error al cambiar el estado de la mantención:', error);
+    res.status(500).send('Error en el servidor al actualizar el estado de la mantención.');
+  }
+});
+
+
+
+
+
+app.get('/api/marcas', async (req, res) => {
+  try {
+    const [marcas] = await pool.query('SELECT DISTINCT marca FROM vehiculos ORDER BY marca');
+    res.json(marcas);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al obtener las marcas');
+  }
+});
+
+// Obtener todos los modelos
+app.get('/api/modelos', async (req, res) => {
+  try {
+    const [marcas] = await pool.query('SELECT DISTINCT marca FROM vehiculos ORDER BY marca');
+    res.json(marcas);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al obtener las marcas');
+  }
+});
+
+// Obtener todos los años
+app.get('/api/anos', async (req, res) => {
+  try {
+    const [marcas] = await pool.query('SELECT DISTINCT marca FROM vehiculos ORDER BY marca');
+    res.json(marcas);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al obtener las marcas');
+  }
+});
+
+
+
 
 const PORT = process.env.PORT || 3000;
 
