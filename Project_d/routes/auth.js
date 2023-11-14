@@ -117,23 +117,41 @@ router.get('/status', verifyToken, async (req, res) => {
     }
 });
 
-router.post('/create-post', (req, res) => {
-    const userId = req.body.usuarioId;
-    const vehicleId = req.body.idVehiculo;
+router.post('/create-post', verifyToken, async (req, res) => {
+    const userId = req.user.id; // obtenido del token JWT
+    const { color, descripcion, kilometraje, precio, version, ano, modelo, marca, comunaId } = req.body;
     
-    // Busca en tu base de datos si existe una publicación similar
-    const existingPost = findPostByUserIdAndVehicleId(userId, vehicleId);
-    
-    if (existingPost) {
-        // Si existe una publicación similar, envía una respuesta de error
-        res.status(400).send('Ya existe una publicación similar.');
-    } else {
-        // Si no existe, puedes proceder a crear una nueva publicación
-        createNewPost(req.body);
-        res.status(200).send('Publicación creada exitosamente.');
+    try {
+        const [marcaResult] = await pool.query('SELECT id_marca FROM marca WHERE marca = ?', [marca]);
+        if (marcaResult.length === 0) {
+            return res.status(404).json({ message: 'Marca no encontrada' });
+        }
+        const marcaId = marcaResult[0].id_marca;
+
+        // Asumiendo que el modelo es un campo de texto y no requiere buscar un ID
+        // Insertar la nueva publicación
+        const [insertResult] = await pool.query(
+            'INSERT INTO vehiculo (color, descripcion, kilometraje, precio, version, ano, usuario_id_usuario, marca_id, comuna, modelo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [color, descripcion, kilometraje, precio, version, ano, userId, marcaid, comunaId, modelo]
+        );
+        
+        res.status(200).json({ message: 'Publicación creada exitosamente.', id: insertResult.insertId });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al crear la publicación', error });
     }
 });
 
+
+
+// ...
+router.get('/marcas', async (req, res) => {
+    try {
+        const [marcas] = await pool.query('SELECT * FROM marca');
+        res.json(marcas);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener las marcas', error });
+    }
+});
 
 
 // Obtener todas las regiones

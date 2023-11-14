@@ -35,7 +35,7 @@
     <h1>Publicar un Vehículo</h1>
 
     <!-- Formulario para la publicación -->
-    <form action="/create-post" method="POST">
+    <form id="publishVehicleForm">
         <div class="input-group">
             <input type="hidden" id="id-vehiculo" name="idVehiculo">
         </div>
@@ -70,20 +70,18 @@
             <input type="number" id="ano" name="ano" required>
         </div>
 
+
         <div class="input-group">
-            <label for="usuario-id">ID del Usuario:</label>
-            <input type="text" id="usuario-id" name="usuarioId" required>
+            <label for="modelo-input">Modelo:</label>
+            <input type="text" id="modelo-input" name="modelo" required placeholder="Ingrese el modelo del vehículo">
         </div>
 
         <div class="input-group">
-            <label for="modelo-id">ID del Modelo:</label>
-            <input type="text" id="modelo-id" name="modeloId" required>
+            <label for="marca-input">Marca:</label>
+            <input type="text" id="marca-input" name="marcaId" list="marca-list" placeholder="Seleccione una marca" required>
+            <datalist id="marca-list"></datalist>
         </div>
-
-        <div class="input-group">
-            <label for="marca-id">ID de la Marca:</label>
-            <input type="text" id="marca-id" name="marcaId" required>
-        </div>
+        
         <!-- ... -->
 
         

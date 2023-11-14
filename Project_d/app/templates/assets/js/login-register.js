@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
         const correo = document.getElementById('correo').value;
         const contrasena = document.getElementById('contrasena').value;
+    console.log( correo , contrasena)
     
         fetch('http://localhost:3000/login', {
           method: 'POST',
