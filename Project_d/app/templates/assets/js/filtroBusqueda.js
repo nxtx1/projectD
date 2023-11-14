@@ -121,4 +121,4 @@ function buscarVehiculos(marca = '', modelo = '', ano = '') {
             });
         })
         .catch(error => console.error('Error al buscar vehículos:', error));
-}
+} 
