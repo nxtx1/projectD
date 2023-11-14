@@ -38,43 +38,45 @@
     <!-- Navbar End -->
 <!-- Rent A Car Start -->
 <div class="container-fluid py-5">
-    <div class="container pt-5 pb-3">
-        
-        <h1 class="display-4 text-uppercase text-center mb-5">Publicaciones</h1>
-        <form id="filtroVehiculos">
-            <select name="marca">
-              <option value="">Selecciona Marca</option>
-              <!-- Opciones de marcas cargadas dinámicamente -->
-            </select>
-          
-            <select name="modelo">
-              <option value="">Selecciona Modelo</option>
-              <!-- Opciones de modelos cargadas dinámicamente -->
-            </select>
-          
-            <select name="ano">
-              <option value="">Selecciona Año</option>
-              <!-- Opciones de años cargadas dinámicamente -->
-            </select>
-          
-            <button type="submit">Buscar</button>
-          </form>
-          
-          <div id="resultadosVehiculos">
-            <!-- Los resultados de la búsqueda se mostrarán aquí -->
-          </div>
-        <div class="row">
-            <!-- Este contenedor será llenado dinámicamente con las tarjetas de vehículos -->
-        </div>
+  <div class="container pt-5 pb-3">
+    <h1 class="display-4 text-uppercase text-center mb-5">Publicaciones</h1>
+    
+    <form id="filtroVehiculos">
+      <select name="marca">
+        <option value="">Selecciona Marca</option>
+        <!-- Las opciones de marcas se cargarán dinámicamente -->
+      </select>
+      
+      <select name="modelo">
+        <option value="">Selecciona Modelo</option>
+        <!-- Las opciones de modelos se cargarán dinámicamente -->
+      </select>
+      
+      <select name="ano">
+        <option value="">Selecciona Año</option>
+        <!-- Las opciones de años se cargarán dinámicamente -->
+      </select>
+      
+      <button type="submit">Buscar</button>
+    </form>
+    
+    <div id="resultadosVehiculos">
+      <!-- Los resultados de la búsqueda se mostrarán aquí -->
     </div>
+    
+    <div class="row">
+      <!-- Este contenedor será llenado dinámicamente con las tarjetas de vehículos -->
+    </div>
+  </div>
 </div>
 
 
     <!-- JavaScript Libraries -->
 
-    <script src="assets/js/usuario.js"></script>
+    <script src="/assets/js/usuario.js"></script>
     <!-- Template Javascript -->
-    <script src="assets/js/cargavehiculosdinamico.js"></script> 
+    <script src="/assets/js/cargavehiculosdinamico.js"></script> 
+    <script src="/assets/js/filtroBusqueda.js"></script> 
 </body>
 
 </html>

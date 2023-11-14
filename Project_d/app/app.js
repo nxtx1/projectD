@@ -290,41 +290,102 @@ app.post('/api/roles/:id/cambiar-estado', authModule.verifyToken, verificarRoles
 });
 
 
-
-
-
 app.get('/api/marcas', async (req, res) => {
   try {
-    const [marcas] = await pool.query('SELECT DISTINCT marca FROM vehiculos ORDER BY marca');
-    res.json(marcas);
+    console.log('Obteniendo marcas...'); // Nuevo
+    const [marcas] = await pool.query('SELECT DISTINCT ma.id_marca, ma.marca FROM vehiculo v JOIN modelo mo ON v.modelo_id_modelo = mo.id_modelo JOIN marca ma ON mo.marca_id_marca = ma.id_marca ORDER BY ma.marca');
+    console.log('Marcas obtenidas:', marcas); // Nuevo
+    res.json(marcas.map(marca => ({ id: marca.id_marca, nombre: marca.marca })));
   } catch (error) {
-    console.error(error);
+    console.error('Error al obtener las marcas:', error); // Modificado
     res.status(500).send('Error al obtener las marcas');
   }
 });
 
-// Obtener todos los modelos
-app.get('/api/modelos', async (req, res) => {
+
+app.get('/api/modelos/:marcaId', async (req, res) => {
   try {
-    const [marcas] = await pool.query('SELECT DISTINCT marca FROM vehiculos ORDER BY marca');
-    res.json(marcas);
+    const marcaId = req.params.marcaId;
+    console.log('Obteniendo modelos para la marca:', marcaId); // Nuevo
+    const [modelos] = await pool.query(`
+    SELECT mo.id_modelo, mo.modelo 
+    FROM modelo mo
+    JOIN vehiculo v ON mo.id_modelo = v.modelo_id_modelo
+    JOIN marca ma ON mo.marca_id_marca = ma.id_marca
+    WHERE ma.id_marca = ?
+    GROUP BY mo.id_modelo, mo.modelo`, [marcaId]);
+    console.log('Modelos obtenidos:', modelos); // Nuevo
+    res.json(modelos);
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Error al obtener las marcas');
+    console.error('Error al obtener los modelos:', error); // Modificado
+    res.status(500).send('Error al obtener los modelos');
   }
 });
 
-// Obtener todos los años
-app.get('/api/anos', async (req, res) => {
+
+
+app.get('/api/anos/:modeloId', async (req, res) => {
   try {
-    const [marcas] = await pool.query('SELECT DISTINCT marca FROM vehiculos ORDER BY marca');
-    res.json(marcas);
+    const modeloId = req.params.modeloId;
+    console.log('Obteniendo años para el modelo:', modeloId); // Nuevo
+    const [anos] = await pool.query(`
+    SELECT v.ano
+    FROM vehiculo v
+    WHERE v.modelo_id_modelo = ?
+    ORDER BY v.ano DESC`, [modeloId]);
+    console.log('Años obtenidos:', anos); // Nuevo
+    res.json(anos);
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Error al obtener las marcas');
+    console.error('Error al obtener los años:', error); // Modificado
+    res.status(500).send('Error al obtener los años');
   }
 });
 
+
+
+
+
+app.get('/api/buscarVehiculos', async (req, res) => {
+  try {
+      let query = `
+          SELECT v.id_vehiculo, v.ano, v.kilometraje, v.precio, v.foto, 
+                 m.modelo, ma.marca, v.transmision
+          FROM vehiculo v
+          JOIN modelo m ON v.modelo_id_modelo = m.id_modelo
+          JOIN marca ma ON m.marca_id_marca = ma.id_marca
+          WHERE 1=1`;
+
+      const params = [];
+
+      if (req.query.marca) {
+          query += ' AND ma.id_marca = ?';
+          params.push(req.query.marca);
+      }
+      if (req.query.modelo) {
+          query += ' AND m.id_modelo = ?';
+          params.push(req.query.modelo);
+      }
+      if (req.query.ano) {
+          query += ' AND v.ano = ?';
+          params.push(req.query.ano);
+      }
+
+      const [vehiculos] = await pool.query(query, params);
+      
+      // Convertir la foto BLOB a una cadena base64 para cada vehículo
+      const vehiculosConFotoBase64 = vehiculos.map(vehiculo => {
+        return {
+          ...vehiculo,
+          foto: vehiculo.foto ? Buffer.from(vehiculo.foto).toString('base64') : null
+        };
+      });
+      
+      res.json(vehiculosConFotoBase64);
+  } catch (error) {
+      console.error('Error al buscar vehículos:', error);
+      res.status(500).send('Error en el servidor');
+  }
+});
 
 
 
