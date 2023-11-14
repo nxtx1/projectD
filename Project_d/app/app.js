@@ -60,6 +60,10 @@ app.get('/mantenciones', authModule.verifyToken, verificarRolesPermitidos, (req,
   res.sendFile(path.join(__dirname, 'templates', 'mantenciones.html'));
 });
 
+app.get('/mantencionesUsuario', authModule.verifyToken, verificarRolesPermitidos, (req, res) => {
+  // Solo los usuarios autenticados pueden acceder aquí
+  res.sendFile(path.join(__dirname, 'templates', 'mantencionesUsuario.html'));
+});
 app.get('/rolUser', authModule.verifyToken, verificarRolesPermitidos, (req, res) => {
   // Solo los usuarios autenticados pueden acceder aquí
   res.sendFile(path.join(__dirname, 'templates', 'rolUser.html'));
@@ -189,10 +193,44 @@ app.post('/crear-mantencion', authModule.verifyToken, async (req, res) => {
     }
   });
 
+  // VER, EDITAR, ELIMINAR MANTENCIONES
 
-
-
-
+  app.get('/mis-mantenciones', authModule.verifyToken, async (req, res) => {
+    const userId = req.user.id; // Asegúrate de que este es el método correcto para obtener el ID del usuario
+  
+    try {
+      const [mantenciones] = await pool.query(
+        'SELECT m.id_mantencion, v.id_vehiculo, m.fecha_mantencion, ma.marca, mo.modelo ' +
+        'FROM mantencion m ' +
+        'JOIN vehiculo v ON m.vehiculo_id_vehiculo = v.id_vehiculo ' +
+        'JOIN modelo mo ON v.modelo_id_modelo = mo.id_modelo ' +
+        'JOIN marca ma ON mo.marca_id_marca = ma.id_marca ' +
+        'WHERE m.usuario_id_usuario = ? ' +
+        'ORDER BY m.fecha_mantencion DESC', 
+        [userId]
+      );
+      res.json(mantenciones);
+    } catch (error) {
+      console.error('Error al obtener las mantenciones del usuario:', error);
+      res.status(500).send('Error al obtener las mantenciones');
+    }
+  });
+  
+  app.delete('/eliminar-mantencion/:id', authModule.verifyToken, async (req, res) => {
+    const idMantencion = req.params.id;
+  
+    try {
+      await pool.query(
+        'DELETE FROM mantencion WHERE id_mantencion = ? AND usuario_id_usuario = ?',
+        [idMantencion, req.user.id]
+      );
+      res.json({ message: 'Mantención eliminada con éxito.' });
+    } catch (error) {
+      console.error('Error al eliminar la mantención:', error);
+      res.status(500).json({ message: 'Error al eliminar la mantención', error });
+    }
+  });
+  
 
 
 

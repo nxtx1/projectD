@@ -1,0 +1,80 @@
+/* Estilo general de la tabla */
+#tabla-mantenciones {
+    width: 100%; /* Ancho completo */
+    border-collapse: collapse; /* Colapsar bordes */
+    margin-top: 20px; /* Espaciado superior */
+}
+
+/* Estilo de los encabezados de la tabla */
+#tabla-mantenciones th {
+    background-color: #4CAF50; /* Color de fondo */
+    color: white; /* Color del texto */
+    font-family: 'Arial', sans-serif; /* Tipo de fuente */
+    padding: 10px; /* Espaciado interno */
+}
+
+/* Estilo de las celdas de la tabla */
+#tabla-mantenciones td {
+    border: 1px solid #ddd; /* Borde de las celdas */
+    padding: 8px; /* Espaciado interno */
+    text-align: left; /* Alineación del texto */
+}
+
+/* Estilo de las filas de la tabla al pasar el mouse */
+#tabla-mantenciones tr:hover {
+    background-color: #ddd; /* Color de fondo al pasar el mouse */
+}
+
+/* Estilo de la modal */
+.modal {
+    display: none; /* Ocultar la modal por defecto */
+    position: fixed; /* Posición fija */
+    z-index: 1; /* Situar sobre otros elementos */
+    left: 0;
+    top: 0;
+    width: 100%; /* Ancho completo */
+    height: 100%; /* Alto completo */
+    overflow: auto; /* Habilitar scroll si es necesario */
+    background-color: rgb(0, 0, 0); /* Color de fondo con opacidad */
+    background-color: rgba(0, 0, 0, 0.4); /* Color de fondo con opacidad */
+}
+
+/* Estilo del contenido de la modal */
+.modal-content {
+    background-color: #fefefe; /* Color de fondo */
+    margin: 15% auto; /* Margen superior y centrado horizontal */
+    padding: 20px; /* Espaciado interno */
+    border: 1px solid #888; /* Borde */
+    width: 80%; /* Ancho */
+}
+
+/* Estilo del botón cerrar de la modal */
+.close {
+    color: #aaa; /* Color del texto */
+    float: right; /* Posicionamiento a la derecha */
+    font-size: 28px; /* Tamaño del texto */
+    font-weight: bold; /* Negrita */
+}
+
+/* Estilo del botón cerrar al pasar el mouse */
+.close:hover,
+.close:focus {
+    color: black; /* Color del texto al pasar el mouse */
+    text-decoration: none; /* Sin decoración de texto */
+    cursor: pointer; /* Cursor en forma de puntero */
+}
+
+/* Estilo del botón guardar de la modal */
+#guardarEstado {
+    background-color: #4CAF50; /* Color de fondo */
+    color: white; /* Color del texto */
+    padding: 10px 20px; /* Espaciado interno */
+    margin: 10px 0; /* Margen superior e inferior */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cursor en forma de puntero */
+}
+
+/* Estilo del botón guardar al pasar el mouse */
+#guardarEstado:hover {
+    background-color: #45a049; /* Color de fondo al pasar el mouse */
+}

@@ -1,0 +1,41 @@
+/* Estilo general del contenedor */
+#misMantenciones {
+    background-color: #f7f7f7; /* Color de fondo del contenedor */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 20px; /* Espaciado interno */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+/* Estilo del título */
+#misMantenciones h2 {
+    color: #333; /* Color del texto */
+    font-family: 'Arial', sans-serif; /* Tipo de fuente */
+    text-align: center; /* Alineación del texto */
+    margin-bottom: 20px; /* Espaciado debajo del título */
+}
+
+/* Estilo general de la tabla */
+#tablaMantenciones {
+    width: 100%; /* Ancho completo */
+    border-collapse: collapse; /* Colapsar bordes */
+}
+
+/* Estilo de los encabezados de la tabla */
+#tablaMantenciones th {
+    background-color: #4CAF50; /* Color de fondo */
+    color: white; /* Color del texto */
+    font-family: 'Arial', sans-serif; /* Tipo de fuente */
+    padding: 10px; /* Espaciado interno */
+}
+
+/* Estilo de las celdas de la tabla */
+#tablaMantenciones td {
+    border: 1px solid #ddd; /* Borde de las celdas */
+    padding: 8px; /* Espaciado interno */
+    text-align: left; /* Alineación del texto */
+}
+
+/* Estilo de las filas de la tabla al pasar el mouse */
+#tablaMantenciones tr:hover {
+    background-color: #ddd; /* Color de fondo al pasar el mouse */
+}
