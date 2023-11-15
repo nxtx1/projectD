@@ -72,17 +72,18 @@
 
 
         <div class="input-group">
-            <label for="modelo-input">Modelo:</label>
-            <input type="text" id="modelo-input" name="modelo" required placeholder="Ingrese el modelo del vehículo">
-        </div>
-
-        <div class="input-group">
-            <label for="marca-input">Marca:</label>
-            <input type="text" id="marca-input" name="marcaId" list="marca-list" placeholder="Seleccione una marca" required>
-            <datalist id="marca-list"></datalist>
+            <label for="marca-id">Marca:</label>
+            <select id="marca-id" name="marcaId" required>
+                <!-- Las opciones de marca se cargarán aquí -->
+            </select>
         </div>
         
-        <!-- ... -->
+        <div class="input-group">
+            <label for="modelo-id">Modelo:</label>
+            <select id="modelo-id" name="modeloId" required>
+                <!-- Las opciones de modelo se cargarán aquí -->
+            </select>
+        </div>
 
         
 
