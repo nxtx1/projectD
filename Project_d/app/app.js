@@ -28,6 +28,10 @@ app.get('/home', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'Home.html'));
 });
 
+app.post('/logout', (req, res) => {
+  res.cookie('token', '', { expires: new Date(0) }); // Establece la cookie de token a una vacía y con una fecha de expiración pasada
+  res.send('Sesión cerrada con éxito');
+});
 
 app.get('/aaa', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'aaa.html'));

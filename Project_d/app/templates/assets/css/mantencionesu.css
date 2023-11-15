@@ -39,3 +39,10 @@
 #tablaMantenciones tr:hover {
     background-color: #ddd; /* Color de fondo al pasar el mouse */
 }
+
+footer {
+    /* Estilo para el footer */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
