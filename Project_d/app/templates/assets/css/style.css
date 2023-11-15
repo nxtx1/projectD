@@ -320,3 +320,6 @@ h6,
     object-fit: cover; /* Esto asegura que la imagen cubra completamente el espacio asignado sin distorsionarse */
   }
   
+html {
+    scroll-behavior: smooth;
+}

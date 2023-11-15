@@ -24,7 +24,7 @@ app.get('/login-register', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'login-register.html'));
 });
 
-app.get('/', (req, res) => {
+app.get('/home', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'Home.html'));
 });
 
