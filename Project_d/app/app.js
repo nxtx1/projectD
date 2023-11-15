@@ -6,6 +6,7 @@ const authModule = require('../routes/auth');  // Asegúrate que este es el path
 require('dotenv').config(); // Carga variables de entorno del archivo .env
 const { pool } = require('../routes/auth');
 const mysql = require('mysql2/promise');
+const moment = require('moment');
 
 const app = express();
 
@@ -169,29 +170,24 @@ app.get('/api/vehiculos', async (req, res) => {
   });
 
 
-app.post('/crear-mantencion', authModule.verifyToken, async (req, res) => {
-    // req.body contendrá los datos enviados desde el formulario
-    console.log(req.body);
-    const { fecha_mantencion, vehiculo_id_vehiculo} = req.body;
+  app.post('/crear-mantencion', authModule.verifyToken, async (req, res) => {
+    const { fecha_mantencion, vehiculo_id_vehiculo } = req.body;
     const userId = req.user.id;
-    console.log('usuario que agendará mantención:', userId);
-    console.log(fecha_mantencion, vehiculo_id_vehiculo, userId);
-    const estadodefecto = 'programado'
+    const estadodefecto = 'programado';
+    
     try {
-      // Aquí insertas los datos en la base de datos
-      const fechaMySQL = new Date(fecha_mantencion).toISOString().slice(0, 19).replace('T', ' ');
-      const result = await pool.query(
-        'INSERT INTO mantencion (fecha_mantencion, usuario_id_usuario, vehiculo_id_vehiculo, estado) VALUES (?, ?, ?, ?)',
-        [fecha_mantencion, userId, vehiculo_id_vehiculo, estadodefecto]
-      );
+        // Asegúrate de que fecha_mantencion ya esté en formato 'YYYY-MM-DD HH:mm' antes de insertarlo
+        await pool.query(
+            'INSERT INTO mantencion (fecha_mantencion, usuario_id_usuario, vehiculo_id_vehiculo, estado) VALUES (?, ?, ?, ?)',
+            [fecha_mantencion, userId, vehiculo_id_vehiculo, estadodefecto]
+        );
       
-      // Si todo va bien, enviar una confirmación al cliente
-      res.status(200).json({ message: 'Mantención agendada correctamente' });
+        res.status(200).json({ message: 'Mantención agendada correctamente' });
     } catch (error) {
-      console.error('Error al crear la mantención:', error);
-      res.status(500).json({ message: 'No se pudo agendar la mantención', error });
+        console.error('Error al crear la mantención:', error);
+        res.status(500).json({ message: 'No se pudo agendar la mantención', error });
     }
-  });
+});
 
   // VER, EDITAR, ELIMINAR MANTENCIONES
 
@@ -425,6 +421,76 @@ app.get('/api/buscarVehiculos', async (req, res) => {
   }
 });
 
+async function generarFechasConHoras() {
+  let fechas = [];
+  let fechaInicio = moment().add(0, 'weeks').startOf('day');
+  let fechaFin = moment(fechaInicio).add(2, 'weeks');
+
+  for (let m = moment(fechaInicio); m.isBefore(fechaFin); m.add(1, 'days')) {
+      if (m.day() !== 0) {
+          for (let hora = 8; hora < 17; hora++) {
+              for (let minuto = 0; minuto < 60; minuto += 30) {
+                  let fechaConHora = moment(m).hour(hora).minute(minuto);
+                  if (fechaConHora.isAfter(moment())) {
+                      fechas.push({
+                          paraMostrar: fechaConHora.format('DD-MM-YYYY HH:mm'),
+                          paraBaseDatos: fechaConHora.format('YYYY-MM-DD HH:mm')
+                      });
+                  }
+              }
+          }
+      }
+  }
+
+  return fechas;
+};
+
+async function obtenerFechasReservadas() {
+  try {
+      const query = 'SELECT fecha_mantencion FROM mantencion WHERE estado = ?';
+      const [resultados] = await pool.query(query, ['programado']); // Destructura el primer elemento del resultado, que debería ser el array con las filas.
+      
+      const fechasReservadas = resultados
+        .map(fila => fila.fecha_mantencion)
+        .filter(fecha => fecha) // Filtrar entradas nulas o indefinidas.
+        .map(fecha => moment(fecha).format('YYYY-MM-DD HH:mm')) // Asegúrate de que la conversión sea válida.
+        .filter(fecha => fecha !== 'Invalid date'); // Filtrar fechas inválidas.
+
+      console.log('Fechas reservadas (formateadas):', fechasReservadas);
+      return fechasReservadas;
+  } catch (error) {
+      console.error('Error al obtener fechas reservadas:', error);
+      throw error;
+  }
+}
+
+
+
+
+async function generarFechasConHorasDisponibles() {
+  let fechasReservadas = await obtenerFechasReservadas();
+  let fechasDisponibles = await generarFechasConHoras(); // Asegúrate de que esta función devuelva las fechas en el mismo formato que la base de datos
+
+  // Filtrar las fechas que ya están reservadas
+  let fechasConHorasDisponibles = fechasDisponibles.filter((fecha) => {
+      return !fechasReservadas.includes(fecha.paraBaseDatos);
+  });
+
+  return fechasConHorasDisponibles;
+}
+
+
+
+
+app.get('/api/fechas', async (req, res) => {
+  try {
+      let fechasConHorasDisponibles = await generarFechasConHorasDisponibles();
+      res.json(fechasConHorasDisponibles);
+  } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ message: 'No se pudieron obtener las fechas disponibles', error });
+  }
+});
 
 
 const PORT = process.env.PORT || 3000;

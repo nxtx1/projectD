@@ -10,8 +10,7 @@ const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'ssss',
-    port: '3306'
+    database: 'awa'
 });
 
 // Función de validación para la contraseña
@@ -67,7 +66,6 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     const { correo, contrasena } = req.body;
-    console.log(process.env.SECRET_KEY);
     try {
         const [results] = await pool.query(
             'SELECT id_usuario, contrasena, rol FROM usuario WHERE correo = ?',
@@ -120,10 +118,10 @@ router.get('/status', verifyToken, async (req, res) => {
 
 router.post('/create-post', verifyToken, async (req, res) => {
     const userId = req.user.id; // obtenido del token JWT
-    const { color, descripcion, kilometraje, precio, version, ano, modelo, marcaId, comunaId } = req.body;
+    const { color, descripcion, kilometraje, precio, version, ano, modelo, marca, comunaId } = req.body;
     
     try {
-        const [marcaResult] = await pool.query('SELECT id_marca FROM marca WHERE marca = ?', [marcaId]);
+        const [marcaResult] = await pool.query('SELECT id_marca FROM marca WHERE marca = ?', [marca]);
         if (marcaResult.length === 0) {
             return res.status(404).json({ message: 'Marca no encontrada' });
         }
@@ -133,7 +131,7 @@ router.post('/create-post', verifyToken, async (req, res) => {
         // Insertar la nueva publicación
         const [insertResult] = await pool.query(
             'INSERT INTO vehiculo (color, descripcion, kilometraje, precio, version, ano, usuario_id_usuario, marca_id, comuna, modelo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [color, descripcion, kilometraje, precio, version, ano, userId, marcaId, comunaId, modelo]
+            [color, descripcion, kilometraje, precio, version, ano, userId, marcaid, comunaId, modelo]
         );
         
         res.status(200).json({ message: 'Publicación creada exitosamente.', id: insertResult.insertId });
@@ -153,17 +151,6 @@ router.get('/marcas', async (req, res) => {
         res.status(500).json({ message: 'Error al obtener las marcas', error });
     }
 });
-
-router.get('/modelos/:marcaId', async (req, res) => {
-    const { marcaId } = req.params;
-    try {
-        const [modelos] = await pool.query('SELECT * FROM modelo WHERE marca_id_marca = ?', [marcaId]);
-        res.json(modelos);
-    } catch (error) {
-        res.status(500).json({ message: 'Error al obtener los modelos', error });
-    }
-});
-
 
 
 // Obtener todas las regiones
