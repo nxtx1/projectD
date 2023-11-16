@@ -106,7 +106,7 @@ function buscarVehiculos(marca = '', modelo = '', ano = '') {
                                 </div>
                                 <div class="px-2 border-left border-right">
                                     <i class="fa fa-cogs text-primary mr-1"></i>
-                                    <span>${vehiculo.transmision === 1 ? 'Automático' : 'Mecánico'}</span>
+                                    <span>${vehiculo.transmision === 1 ? 'Automático' : 'Manual'}</span>
                                 </div>
                                 <div class="px-2">
                                     <i class="fa fa-road text-primary mr-1"></i>

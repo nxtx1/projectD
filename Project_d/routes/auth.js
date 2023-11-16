@@ -125,8 +125,7 @@ router.get('/status', verifyToken, async (req, res) => {
 router.post('/create-post', verifyToken, upload.single('vehicleImage'), async (req, res) => {
     const userId = req.user.id; // obtenido del token JWT
     const { descripcion, kilometraje, precio, combustible, transmision, ano, modelo_id_modelo, comuna_id_comuna } = req.body;
-    console.log(req.file); // Debería mostrar la información del archivo
-    console.log(req.body); // Debería mostrar el resto de los campos del formulario
+
     try {
         // Verifica si ya existe una publicación con los mismos detalles
         const [existing] = await pool.query(
@@ -144,7 +143,6 @@ router.post('/create-post', verifyToken, upload.single('vehicleImage'), async (r
         if (req.file && req.file.buffer) {
             imageBuffer = req.file.buffer;
         }
-        console.log(req.file)
         // Si no hay duplicados, procede a insertar la nueva publicación, incluyendo la imagen
         const [insertResult] = await pool.query(
             'INSERT INTO vehiculo (descripcion, kilometraje, precio, combustible, transmision, ano, usuario_id_usuario, modelo_id_modelo, comuna_id_comuna, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
