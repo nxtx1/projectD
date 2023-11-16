@@ -60,31 +60,29 @@ document.addEventListener('DOMContentLoaded', function() {
     // Función para manejar el envío del formulario
     async function enviarFormulario(event) {
         event.preventDefault(); // Evita el envío predeterminado del formulario
-
-        // Aquí asumo que los ID de los inputs existen y son correctos
-        // Obten los valores del formulario
-        const color = document.getElementById('color').value;
-        // ...obtener otros valores...
-
-        const comunaId = document.getElementById('comuna-id').value; // Obtén el ID de la comuna seleccionada
-
+    
+        // Obten los valores del formulario, incluyendo los nuevos campos
+        const descripcion = document.getElementById('descripcion').value;
+        const kilometraje = document.getElementById('kilometraje').value;
+        const precio = document.getElementById('precio').value;
+        const combustible = document.getElementById('combustible').value; // Asumimos que existe un input con id 'combustible'
+        const transmision = document.getElementById('transmision').value; // Asumimos que existe un input con id 'transmision'
+        const ano = document.getElementById('ano').value;
+        const modeloId = document.getElementById('modelo-id').value; // Asegúrate de que este campo existe y se esté llenando correctamente
+        const comunaId = document.getElementById('comuna-id').value; // Asegúrate de que este campo existe y se esté llenando correctamente
+    
         // Objeto con los datos del formulario
         const vehiculoData = {
-            color, 
             descripcion,
             kilometraje,
             precio,
-            version, 
+            combustible, // Agregado al objeto de datos
+            transmision, // Agregado al objeto de datos
             ano, 
-            userId, 
-            marcaid,
-            comunaId,
-            modelo
-            // ...otros datos...
-            // Asegúrate de que corresponda al ID de la comuna
+            modelo_id_modelo: modeloId, // Asegúrate de que este valor se está enviando correctamente
+            comuna_id_comuna: comunaId // Asegúrate de que este valor se está enviando correctamente
         };
-        console.log(JSON.stringify(vehiculoData));
-
+    
         try {
             // Realizar la solicitud POST al servidor
             const response = await fetch('/create-post', {
@@ -94,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify(vehiculoData) // Convertir los datos a una cadena JSON
             });
-
+    
             // Verificar si el envío fue exitoso
             if (response.ok) {
                 const result = await response.json();
@@ -112,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Agrega el event listener para el envío del formulario
-    const form = document.querySelector('form'); // Asegúrate de que este selector corresponda a tu formulario
+    const form = document.getElementById('publishVehicleForm'); // Corregido para usar el ID correcto del formulario
     form.addEventListener('submit', enviarFormulario);
 });
 
