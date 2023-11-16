@@ -12,6 +12,7 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Rubik&display=swap" rel="stylesheet"> 
+
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
 
@@ -72,11 +73,11 @@
 <div id="mantencionContainer" class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card-mantencion">
-                <div id="mantencion-header" class="card-header-mantencion">
-                    <h2 class="mantencion-title">Agendar Mantención</h2>
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Agendar Mantención</h2>
                 </div>
-                <div class="card-body-mantencion">
+                <div class="card-body">
                     <!-- El formulario para agendar la mantención -->
                     <form id="mantencionForm" action="/crear-mantencion" method="post">
                         <div class="mb-3">
@@ -117,7 +118,6 @@
 
 
    <script src="/assets/js/usuario.js"></script>
-   <script src="/assets/js/mensaje.js"></script>
    <!-- Template Javascript -->
    <script src="/assets/js/sesion.js"></script>
 </body>
