@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('imagen-vehiculo').src = vehiculo.foto;
       document.getElementById('modelo-vehiculo').textContent = vehiculo.modelo;
       document.getElementById('ano-vehiculo').textContent = vehiculo.ano;
-      document.getElementById('transmision-vehiculo').textContent = vehiculo.transmision === 1 ? 'Automático' : 'Mecánico';
+      document.getElementById('transmision-vehiculo').textContent = vehiculo.transmision === 1 ? 'Automático' : 'Manual';
       document.getElementById('kilometraje-vehiculo').textContent = `${vehiculo.kilometraje}`;
       document.getElementById('gasolina-vehiculo').textContent = vehiculo.transmision === 1 ? 'Diesel' : 'Gasolina';
       document.getElementById('precio-vehiculo').textContent = `$${vehiculo.precio}`;

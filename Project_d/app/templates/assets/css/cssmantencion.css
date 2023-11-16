@@ -1,53 +1,59 @@
-/* estilo_personalizado.css */
+/* cssmantencion.css */
 body {
-    background-color: #e9ecef;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    padding-top: 20px;
 }
 
 .card {
-    border-radius: 0.5rem;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .card-header {
-    font-size: 1.5rem;
-    letter-spacing: 0.5px;
+    background-color: #007bff;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+.card-body {
+    padding: 20px;
+    background-color: #f8f9fa;
 }
 
 .form-label {
-    font-weight: 500;
+    font-size: 1.1em;
     color: #495057;
+    margin-bottom: 5px;
+}
+
+.form-select {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    height: 40px;
+    font-size: 1em;
 }
 
 .btn-primary {
-    font-size: 1rem;
-    font-weight: 500;
-    padding: 0.75rem 1.5rem;
-    letter-spacing: 0.5px;
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
 }
 
 .btn-primary:hover {
-    opacity: 0.85;
+    background-color: #0056b3;
+    border-color: #004085;
 }
 
-/* Estilos para pantallas pequeñas y ajustes */
-@media (max-width: 576px) {
+/* Ajuste de estilos para pantallas pequeñas */
+@media screen and (max-width: 768px) {
     .card {
-        margin-top: 3.5rem;
+        margin: 10px;
     }
-
-    .card-header {
-        font-size: 1.25rem;
-    }
-}
-
-/* Mejorar el enfoque de los elementos de formulario para mayor accesibilidad */
-.form-select:focus {
-    border-color: #80bdff;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-/* Ajustes visuales para el formulario y sus componentes */
-.form-select {
-    height: calc(2.25rem + 2px);
-    font-size: 0.975rem;
 }

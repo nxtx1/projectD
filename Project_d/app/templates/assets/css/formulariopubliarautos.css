@@ -1,0 +1,105 @@
+/* Estilos generales */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f4f4f4; /* Cambie este color de fondo para que coincida con su diseño */
+}
+
+header {
+    background: #333; /* Cambie este color de fondo para que coincida con su diseño */
+    color: #fff;
+    padding: 10px 20px;
+}
+
+.logo {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+}
+
+.menu li {
+    display: inline;
+    margin-right: 10px;
+}
+
+.auth button {
+    background: #f60; /* Cambie este color de fondo para que coincida con su diseño */
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+/* Estilos de la sección de publicación de vehículos */
+.publish-vehicle {
+    background: #fff;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.publish-vehicle h1 {
+    color: #333; /* Cambie este color para que coincida con su diseño */
+    font-size: 2.4em;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 10px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333; /* Cambie este color para que coincida con su diseño */
+}
+
+.input-group input[type="text"],
+.input-group input[type="number"],
+.input-group input[type="file"],
+.input-group select,
+.input-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd; /* Cambie este color para que coincida con su diseño */
+    border-radius: 5px;
+}
+
+.input-group textarea {
+    resize: vertical;
+}
+
+button[type="submit"] {
+    background: #f60; /* Cambie este color de fondo para que coincida con su diseño */
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 5px;
+    display: block;
+    width: 100%;
+}
+
+button[type="submit"]:hover {
+    background: #e55; /* Cambie este color para un efecto hover que coincida con su diseño */
+}
+
+/* Responsive design para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .menu li {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .auth button {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
