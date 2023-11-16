@@ -74,10 +74,6 @@ app.get('/rolUser', authModule.verifyToken, verificarRolesPermitidos, (req, res)
   res.sendFile(path.join(__dirname, 'templates', 'rolUser.html'));
 });
 
-app.get('/Mispublicaciones', authModule.verifyToken, (req, res) => {
-  // Solo los usuarios autenticados pueden acceder aquí
-  res.sendFile(path.join(__dirname, 'templates', 'Mis_publicaciones.html'));
-});
 
 
 app.get('/obtener-vehiculos', authModule.verifyToken, async (req, res) => {
@@ -139,38 +135,6 @@ app.get('/api/vehiculos/:id', async (req, res) => {
     }
   });
   
-  app.get('/mis-publicaciones', authModule.verifyToken, async (req, res) => {
-    const userId = req.user.id; // ID del usuario obtenido del token JWT
-
-    try {
-        const [publicaciones] = await pool.query(
-          `SELECT 
-            vehiculo.*, 
-            marca.marca AS marca, 
-            modelo.modelo AS modelo
-        FROM 
-            vehiculo
-            JOIN modelo ON vehiculo.modelo_id_modelo = modelo.id_modelo
-            JOIN marca ON modelo.marca_id_marca = marca.id_marca
-        WHERE 
-            vehiculo.usuario_id_usuario = ?`, [userId]
-        );
-
-        // Opcional: Convertir BLOB a base64 si estás guardando imágenes en BLOB
-        const publicacionesConFoto = publicaciones.map(pub => {
-            return {
-                ...pub,
-                foto: pub.foto ? Buffer.from(pub.foto).toString('base64') : null
-            };
-        });
-
-        res.json(publicacionesConFoto);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error al obtener las publicaciones del usuario');
-    }
-});
-
   
 app.get('/vehiculo/:id', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'detalle-vehiculo.html'));
