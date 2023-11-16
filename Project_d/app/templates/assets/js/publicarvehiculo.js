@@ -58,59 +58,53 @@ document.addEventListener('DOMContentLoaded', function() {
     cargarRegiones();
 
     // Función para manejar el envío del formulario
-    async function enviarFormulario(event) {
-        event.preventDefault(); // Evita el envío predeterminado del formulario
+    // Función para manejar el envío del formulario
+async function enviarFormulario(event) {
+    event.preventDefault(); // Evita el envío predeterminado del formulario
+
+    // Usa FormData para construir los datos del formulario
+    const formData = new FormData();
+    formData.append('descripcion', document.getElementById('descripcion').value);
+    formData.append('kilometraje', document.getElementById('kilometraje').value);
+    formData.append('precio', document.getElementById('precio').value);
+    formData.append('combustible', document.getElementById('combustible').value);
+    formData.append('transmision', document.getElementById('transmision').value);
+    formData.append('ano', document.getElementById('ano').value);
+    formData.append('modelo_id_modelo', document.getElementById('modelo-id').value);
+    formData.append('comuna_id_comuna', document.getElementById('comuna-id').value);
     
-        // Obten los valores del formulario, incluyendo los nuevos campos
-        const descripcion = document.getElementById('descripcion').value;
-        const kilometraje = document.getElementById('kilometraje').value;
-        const precio = document.getElementById('precio').value;
-        const combustible = document.getElementById('combustible').value; // Asumimos que existe un input con id 'combustible'
-        const transmision = document.getElementById('transmision').value; // Asumimos que existe un input con id 'transmision'
-        const ano = document.getElementById('ano').value;
-        const modeloId = document.getElementById('modelo-id').value; // Asegúrate de que este campo existe y se esté llenando correctamente
-        const comunaId = document.getElementById('comuna-id').value; // Asegúrate de que este campo existe y se esté llenando correctamente
-    
-        // Objeto con los datos del formulario
-        const vehiculoData = {
-            descripcion,
-            kilometraje,
-            precio,
-            combustible, // Agregado al objeto de datos
-            transmision, // Agregado al objeto de datos
-            ano, 
-            modelo_id_modelo: modeloId, // Asegúrate de que este valor se está enviando correctamente
-            comuna_id_comuna: comunaId // Asegúrate de que este valor se está enviando correctamente
-        };
-    
-        try {
-            // Realizar la solicitud POST al servidor
-            const response = await fetch('/create-post', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(vehiculoData) // Convertir los datos a una cadena JSON
-            });
-    
-            // Verificar si el envío fue exitoso
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Resultado:', result);
-                // Aquí podrías redirigir al usuario o mostrar un mensaje de éxito
-            } else {
-                // Manejar errores si la respuesta no fue exitosa
-                const errorResult = await response.json();
-                console.error('Error al enviar formulario:', errorResult);
-            }
-        } catch (error) {
-            // Capturar errores de red o del servidor
-            console.error('Error de red o del servidor:', error);
-        }
+    // Agrega la imagen
+    const imageInput = document.getElementById('vehicle-image');
+    if (imageInput.files[0]) {
+        formData.append('vehicleImage', imageInput.files[0]);
     }
 
-    // Agrega el event listener para el envío del formulario
-    const form = document.getElementById('publishVehicleForm'); // Corregido para usar el ID correcto del formulario
-    form.addEventListener('submit', enviarFormulario);
+    try {
+        // Realizar la solicitud POST al servidor
+        const response = await fetch('/create-post', {
+            method: 'POST',
+            body: formData // FormData se enviará con el tipo de contenido adecuado automáticamente
+        });
+
+        // Verificar si el envío fue exitoso
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Resultado:', result);
+            // Aquí podrías redirigir al usuario o mostrar un mensaje de éxito
+        } else {
+            // Manejar errores si la respuesta no fue exitosa
+            const errorResult = await response.json();
+            console.error('Error al enviar formulario:', errorResult);
+        }
+    } catch (error) {
+        // Capturar errores de red o del servidor
+        console.error('Error de red o del servidor:', error);
+    }
+}
+
+// Agrega el event listener para el envío del formulario
+const form = document.getElementById('publishVehicleForm');
+form.addEventListener('submit', enviarFormulario);
+
 });
 

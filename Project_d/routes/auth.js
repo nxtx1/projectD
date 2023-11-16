@@ -2,6 +2,12 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2/promise');
+const multer = require('multer');
+// Configura Multer para guardar archivos en la memoria
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage, limits: { fileSize: 10 * 1024 * 1024 }  });
+
+// Luego, usarías 'upload' como middleware en tu ruta de POST
 
 const router = express.Router();
 
@@ -10,7 +16,7 @@ const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'awa'
+    database: 'ssss'
 });
 
 // Función de validación para la contraseña
@@ -116,43 +122,43 @@ router.get('/status', verifyToken, async (req, res) => {
     }
 });
 
-router.post('/create-post', verifyToken, async (req, res) => {
+router.post('/create-post', verifyToken, upload.single('vehicleImage'), async (req, res) => {
     const userId = req.user.id; // obtenido del token JWT
-<<<<<<< Updated upstream
-    const { color, descripcion, kilometraje, precio, version, ano, modelo, marca, comunaId } = req.body;
-    
-    try {
-        const [marcaResult] = await pool.query('SELECT id_marca FROM marca WHERE marca = ?', [marca]);
-        if (marcaResult.length === 0) {
-            return res.status(404).json({ message: 'Marca no encontrada' });
-        }
-        const marcaId = marcaResult[0].id_marca;
-
-        // Asumiendo que el modelo es un campo de texto y no requiere buscar un ID
-        // Insertar la nueva publicación
-        const [insertResult] = await pool.query(
-            'INSERT INTO vehiculo (color, descripcion, kilometraje, precio, version, ano, usuario_id_usuario, marca_id, comuna, modelo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [color, descripcion, kilometraje, precio, version, ano, userId, marcaid, comunaId, modelo]
-=======
-    // Asumimos que combustible y transmision son proporcionados en el cuerpo de la solicitud.
-    // Si no es así, tendrías que establecer valores por defecto o manejarlos de alguna manera.
     const { descripcion, kilometraje, precio, combustible, transmision, ano, modelo_id_modelo, comuna_id_comuna } = req.body;
-    
+    console.log(req.file); // Debería mostrar la información del archivo
+    console.log(req.body); // Debería mostrar el resto de los campos del formulario
     try {
-        // No necesitas buscar la marca por id ya que se asume que modelo_id_modelo ya es un id válido
-        // Insertar la nueva publicación, omitimos color y versión ya que no aparecen en la tabla
+        // Verifica si ya existe una publicación con los mismos detalles
+        const [existing] = await pool.query(
+            'SELECT * FROM vehiculo WHERE usuario_id_usuario = ? AND modelo_id_modelo = ? AND kilometraje = ? AND transmision = ?',
+            [userId, modelo_id_modelo, kilometraje, transmision]
+        );
+
+        if (existing.length > 0) {
+            // Si existe una publicación, devuelve un mensaje de error
+            return res.status(409).json({ message: 'Una publicación similar ya existe.' });
+        }
+
+        // Convertir el archivo de imagen a un Buffer para insertar en la base de datos
+        let imageBuffer = null;
+        if (req.file && req.file.buffer) {
+            imageBuffer = req.file.buffer;
+        }
+        console.log(req.file)
+        // Si no hay duplicados, procede a insertar la nueva publicación, incluyendo la imagen
         const [insertResult] = await pool.query(
-            'INSERT INTO vehiculo (descripcion, kilometraje, precio, combustible, transmision, ano, usuario_id_usuario, modelo_id_modelo, comuna_id_comuna) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [descripcion, kilometraje, precio, combustible, transmision, ano, userId, modelo_id_modelo, comuna_id_comuna]
->>>>>>> Stashed changes
+            'INSERT INTO vehiculo (descripcion, kilometraje, precio, combustible, transmision, ano, usuario_id_usuario, modelo_id_modelo, comuna_id_comuna, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [descripcion, kilometraje, precio, combustible, transmision, ano, userId, modelo_id_modelo, comuna_id_comuna, imageBuffer]
         );
         
         res.status(200).json({ message: 'Publicación creada exitosamente.', id: insertResult.insertId });
     } catch (error) {
-        console.error(error); // Buenas prácticas: registrar el error en el log del servidor
+        console.error(error); // Registra el error en el log del servidor
         res.status(500).json({ message: 'Error al crear la publicación', error });
     }
 });
+
+
 
 
 
@@ -167,6 +173,15 @@ router.get('/marcas', async (req, res) => {
     }
 });
 
+router.get('/modelos/:marcaId', async (req, res) => {
+    const { marcaId } = req.params;
+    try {
+        const [modelos] = await pool.query('SELECT * FROM modelo WHERE marca_id_marca = ?', [marcaId]);
+        res.json(modelos);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener los modelos', error });
+    }
+});
 
 // Obtener todas las regiones
 router.get('/regiones', async (req, res) => {
