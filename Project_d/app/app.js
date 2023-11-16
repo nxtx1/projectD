@@ -386,11 +386,20 @@ app.get('/api/anos/:modeloId', async (req, res) => {
 app.get('/api/buscarVehiculos', async (req, res) => {
   try {
       let query = `
-          SELECT v.id_vehiculo, v.ano, v.kilometraje, v.precio, v.foto, 
-                 m.modelo, ma.marca, v.transmision
-          FROM vehiculo v
-          JOIN modelo m ON v.modelo_id_modelo = m.id_modelo
-          JOIN marca ma ON m.marca_id_marca = ma.id_marca
+      SELECT 
+      v.id_vehiculo,
+      v.ano,
+      v.kilometraje,
+      v.precio,
+      v.transmision,
+      v.foto,
+      m.modelo,
+      ma.marca,
+      man.estado
+    FROM vehiculo v
+    JOIN modelo m ON v.modelo_id_modelo = m.id_modelo
+    JOIN marca ma ON m.marca_id_marca = ma.id_marca
+    LEFT JOIN mantencion man ON v.id_vehiculo = man.vehiculo_id_vehiculo
           WHERE 1=1`;
 
       const params = [];

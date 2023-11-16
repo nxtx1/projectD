@@ -5,7 +5,11 @@
     --light: #F4F5F8;
     --dark: #1C1E32;
 }
-
+#customDropdownMenu {
+    margin-right: -100px; /* Ajusta este valor según sea necesario */
+    /* Puedes agregar más propiedades aquí si necesitas ajustar otros aspectos */
+  }
+  
 h1,
 h2,
 .font-weight-bold {
@@ -323,3 +327,10 @@ h6,
 html {
     scroll-behavior: smooth;
 }
+.mantenimiento-completado {
+    color: #F77D0A;
+    font-weight: bold;
+    margin-top: -20px;
+    /* Otros estilos que desees agregar */
+  }
+  

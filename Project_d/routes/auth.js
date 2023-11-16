@@ -118,7 +118,6 @@ router.get('/status', verifyToken, async (req, res) => {
 
 router.post('/create-post', verifyToken, async (req, res) => {
     const userId = req.user.id; // obtenido del token JWT
-<<<<<<< Updated upstream
     const { color, descripcion, kilometraje, precio, version, ano, modelo, marca, comunaId } = req.body;
     
     try {
@@ -133,18 +132,6 @@ router.post('/create-post', verifyToken, async (req, res) => {
         const [insertResult] = await pool.query(
             'INSERT INTO vehiculo (color, descripcion, kilometraje, precio, version, ano, usuario_id_usuario, marca_id, comuna, modelo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [color, descripcion, kilometraje, precio, version, ano, userId, marcaid, comunaId, modelo]
-=======
-    // Asumimos que combustible y transmision son proporcionados en el cuerpo de la solicitud.
-    // Si no es así, tendrías que establecer valores por defecto o manejarlos de alguna manera.
-    const { descripcion, kilometraje, precio, combustible, transmision, ano, modelo_id_modelo, comuna_id_comuna } = req.body;
-    
-    try {
-        // No necesitas buscar la marca por id ya que se asume que modelo_id_modelo ya es un id válido
-        // Insertar la nueva publicación, omitimos color y versión ya que no aparecen en la tabla
-        const [insertResult] = await pool.query(
-            'INSERT INTO vehiculo (descripcion, kilometraje, precio, combustible, transmision, ano, usuario_id_usuario, modelo_id_modelo, comuna_id_comuna) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [descripcion, kilometraje, precio, combustible, transmision, ano, userId, modelo_id_modelo, comuna_id_comuna]
->>>>>>> Stashed changes
         );
         
         res.status(200).json({ message: 'Publicación creada exitosamente.', id: insertResult.insertId });
