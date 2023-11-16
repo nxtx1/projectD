@@ -16,7 +16,7 @@ const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'ssss'
+    database: 'awa'
 });
 
 // Función de validación para la contraseña
