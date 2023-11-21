@@ -344,3 +344,76 @@ html {
 .p{
     background-color: #F4F5F8;
 }
+
+
+#filtroVehiculos {
+    padding: 15px; /* Reducido desde 20px */
+    border-radius: 8px;
+  }
+  
+  #filtroVehiculos select,
+  #filtroVehiculos input[type="number"] {
+    width: 100%;
+    padding: 4px; /* Reducido desde 10px */
+    margin-bottom: 5px; /* Reducido desde 10px */
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    background-color: #ffffff;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    font-size: 0.9em; /* Opcional: Ajustar si el texto es muy grande */
+  }
+  
+  #filtroVehiculos .filter-group {
+    margin-bottom: 10px; /* Reducido desde 15px */
+  }
+  
+  #filtroVehiculos .filter-header {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  #filtroVehiculos .filter-dropdown {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  #filtroVehiculos .filter-input {
+    flex: 1;
+    margin-right: 5px; /* Ajustado para mantener la proporción */
+  }
+  
+  #filtroVehiculos .filter-input:last-child {
+    margin-right: 0;
+  }
+  
+  #filtroVehiculos button {
+    width: 100%;
+    padding: 8px; /* Reducido desde 10px */
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #007bff;
+    margin-top: 2px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  #filtroVehiculos button:hover {
+    background-color: #0056b3;
+  }
+  
+  #filtroVehiculos button[type="reset"] {
+    background-color: #6c757d;
+  }
+  
+  #filtroVehiculos button[type="reset"]:hover {
+    background-color: #5a6268;
+  }
+  
+
+
+

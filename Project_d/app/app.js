@@ -116,6 +116,7 @@ app.get('/api/vehiculos/:id', async (req, res) => {
         v.precio,
         v.transmision,
         v.descripcion,
+        v.combustible,
         mo.modelo,
         m.marca
       FROM vehiculo v
@@ -465,6 +466,8 @@ app.get('/api/anos/:modeloId', async (req, res) => {
 
 
 app.get('/api/buscarVehiculos', async (req, res) => {
+  const { marca, modelo, anoInicio, anoFin, precioMin, precioMax, transmision, combustible, kilometrajeMin, kilometrajeMax} = req.query;
+
   try {
       let query = `
       SELECT 
@@ -474,6 +477,7 @@ app.get('/api/buscarVehiculos', async (req, res) => {
       v.precio,
       v.transmision,
       v.foto,
+      v.combustible,
       m.modelo,
       ma.marca,
       man.estado
@@ -483,37 +487,67 @@ app.get('/api/buscarVehiculos', async (req, res) => {
     LEFT JOIN mantencion man ON v.id_vehiculo = man.vehiculo_id_vehiculo
           WHERE 1=1 AND v.estado = 'Aprobado'`;
 
-      const params = [];
+          const params = [];
 
-      if (req.query.marca) {
-          query += ' AND ma.id_marca = ?';
-          params.push(req.query.marca);
-      }
-      if (req.query.modelo) {
-          query += ' AND m.id_modelo = ?';
-          params.push(req.query.modelo);
-      }
-      if (req.query.ano) {
-          query += ' AND v.ano = ?';
-          params.push(req.query.ano);
-      }
 
-      const [vehiculos] = await pool.query(query, params);
+          if (marca) {
+            query += ' AND ma_id_marca = ?';
+            params.push(marca);
+          }
+          if (modelo) {
+            query += ' AND m_id_modelo = ?';
+            params.push(modelo);
+          }
+          if (anoInicio) {
+            query += ' AND v.ano >= ?';
+            params.push(anoInicio);
+          }
+          if (anoFin) {
+            query += ' AND v.ano <= ?';
+            params.push(anoFin);
+          }
+          if (precioMin) {
+            query += ' AND v.precio >= ?';
+            params.push(precioMin);
+          }
+          if (precioMax) {
+            query += ' AND v.precio <= ?';
+            params.push(precioMax);
+          }
+          if (transmision) {
+            query += ' AND v.transmision = ?';
+            params.push(transmision);
+          }
+          if (combustible) {
+            query += ' AND v.combustible = ?';
+            params.push(combustible);
+          }
+          if (kilometrajeMin) {
+            query += ' AND v.kilometraje >= ?';
+            params.push(kilometrajeMin);
+          }
+          if (kilometrajeMax) {
+            query += ' AND v.kilometraje <= ?';
+            params.push(kilometrajeMax);
+          }
       
-      // Convertir la foto BLOB a una cadena base64 para cada vehículo
-      const vehiculosConFotoBase64 = vehiculos.map(vehiculo => {
-        return {
-          ...vehiculo,
-          foto: vehiculo.foto ? Buffer.from(vehiculo.foto).toString('base64') : null
-        };
-      });
+          const [vehiculos] = await pool.query(query, params);
+          console.log(params);
       
-      res.json(vehiculosConFotoBase64);
-  } catch (error) {
-      console.error('Error al buscar vehículos:', error);
-      res.status(500).send('Error en el servidor');
-  }
-});
+          // Convertir la foto BLOB a una cadena base64 para cada vehículo
+          const vehiculosConFotoBase64 = vehiculos.map(vehiculo => {
+            return {
+              ...vehiculo,
+              foto: vehiculo.foto ? Buffer.from(vehiculo.foto).toString('base64') : null
+            };
+          });
+          
+          res.json(vehiculosConFotoBase64);
+      } catch (error) {
+          console.error('Error al buscar vehículos:', error);
+          res.status(500).send('Error en el servidor');
+      }
+    });
 
 async function generarFechasConHoras() {
   let fechas = [];

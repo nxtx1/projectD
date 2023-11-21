@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('ano-vehiculo').textContent = vehiculo.ano;
       document.getElementById('transmision-vehiculo').textContent = vehiculo.transmision === 1 ? 'Automático' : 'Manual';
       document.getElementById('kilometraje-vehiculo').textContent = `${vehiculo.kilometraje}`;
-      document.getElementById('gasolina-vehiculo').textContent = vehiculo.transmision === 1 ? 'Diesel' : 'Gasolina';
+      document.getElementById('gasolina-vehiculo').textContent = vehiculo.combustible === 0 ? 'Diesel' : 'Gasolina';
       document.getElementById('precio-vehiculo').textContent = `$${vehiculo.precio}`;
       document.getElementById('descripcion-vehiculo').textContent = `${vehiculo.descripcion}`;
     })

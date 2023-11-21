@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
+
     const marcaSelect = document.getElementsByName('marca')[0];
     const modeloSelect = document.getElementsByName('modelo')[0];
     const anoSelect = document.getElementsByName('ano')[0];
-
+  
     // Evento para cambio en selección de marca
     marcaSelect.addEventListener('change', function() {
         cargarModelosPorMarca(this.value);
@@ -48,19 +49,24 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   // Asegúrate de que esta función esté definida y se ejecute cuando se cambia el modelo
-  function cargarAnosPorModelo(modeloId) {
-    fetch(`/api/anos/${modeloId}`)
-        .then(response => response.json())
-        .then(anos => {
-            const anoSelect = document.getElementsByName('ano')[0];
-            anoSelect.innerHTML = '<option value="">Selecciona Año</option>';
-            anos.forEach(ano => {
-                // Asegúrate de usar ano.ano si esa es la estructura de tus objetos
-                anoSelect.add(new Option(ano.ano, ano.ano));
-            });
-        })
-        .catch(error => console.error('Error al cargar años:', error));
-}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var filterHeaders = document.querySelectorAll('.filter-header');
+
+  filterHeaders.forEach(function(header) {
+    header.addEventListener('click', function() {
+      // Toggle la clase 'active' para el header
+      this.classList.toggle('active');
+      // Muestra u oculta el siguiente elemento .filter-dropdown
+      var dropdown = this.nextElementSibling;
+      if (dropdown.style.display === 'flex') {
+        dropdown.style.display = 'none';
+      } else {
+        dropdown.style.display = 'flex';
+      }
+    });
+  });
+});
 
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('filtroVehiculos');
@@ -69,24 +75,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const marca = document.getElementsByName('marca')[0].value;
         const modelo = document.getElementsByName('modelo')[0].value;
-        const ano = document.getElementsByName('ano')[0].value;
         
-        buscarVehiculos(marca, modelo, ano);
+        buscarVehiculos(marca, modelo);
     });
 
     // Cargar todos los vehículos inicialmente
     buscarVehiculos();
 });
 
-function buscarVehiculos(marca = '', modelo = '', ano = '') {
-    // Construye la URL con los parámetros de búsqueda
-    let url = '/api/buscarVehiculos?';
-    url += `marca=${marca}&modelo=${modelo}&ano=${ano}`;
 
-    // Realiza la solicitud al servidor
-    fetch(url)
-        .then(response => response.json())
-        .then(vehiculos => {
+function buscarVehiculos() {
+  const marca = document.getElementsByName('marca')[0].value;
+  const modelo = document.getElementsByName('modelo')[0].value;
+  const anoInicio = document.getElementsByName('anoInicio')[0].value;
+  const anoFin = document.getElementsByName('anoFin')[0].value;
+  const precioMin = document.getElementsByName('precioMin')[0].value;
+  const precioMax = document.getElementsByName('precioMax')[0].value;
+  const transmision = document.getElementsByName('transmision')[0].value;
+  const combustible = document.getElementsByName('combustible')[0].value;
+  const kilometrajeMin = document.getElementsByName('kilometrajeMin')[0].value;
+  const kilometrajeMax = document.getElementsByName('kilometrajeMax')[0].value;
+
+  let url = '/api/buscarVehiculos?';
+  url += `marca=${marca}&modelo=${modelo}&anoInicio=${anoInicio}&anoFin=${anoFin}`;
+  url += `&precioMin=${precioMin}&precioMax=${precioMax}&transmision=${transmision}`;
+  url += `&combustible=${combustible}&kilometrajeMin=${kilometrajeMin}&kilometrajeMax=${kilometrajeMax}`;
+  fetch(url)
+      .then(response => response.json())
+      .then(vehiculos => {
             const container = document.querySelector('.row');
             container.innerHTML = ''; // Limpiar resultados anteriores
 

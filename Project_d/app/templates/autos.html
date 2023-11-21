@@ -85,13 +85,41 @@
         <option value="">Selecciona Modelo</option>
         <!-- Las opciones de modelos se cargarán dinámicamente -->
       </select>
-      
-      <select name="ano">
-        <option value="">Selecciona Año</option>
-        <!-- Las opciones de años se cargarán dinámicamente -->
+      <div class="filter-group">
+      <select name="transmision">
+        <option value="">Selecciona Transmisión</option>
+        <option value="1">Automático</option>
+        <option value="0">Manual</option>
       </select>
+      <select name="combustible">
+        <option value="">Tipo de Combustible</option>
+        <option value="1">Gasolina</option>
+        <option value="0">Diésel</option>
+      </select>
+        <div class="filter-header">Precio</div>
+        <div class="filter-dropdown">
+          <input type="number" name="precioMin" placeholder="Min." class="filter-input">
+          <span>-</span>
+          <input type="number" name="precioMax" placeholder="Máx." class="filter-input">
+        </div>
+        <div class="filter-header">Año</div>
+        <div class="filter-dropdown">
+          <input type="number" name="anoInicio" placeholder="Min." class="filter-input">
+          <span>-</span>
+          <input type="number" name="anoFin" placeholder="Máx." class="filter-input">
+        </div>
+
       
+      <div class="filter-group">
+        <div class="filter-header">Kilómetros</div>
+        <div class="filter-dropdown">
+          <input type="number" name="kilometrajeMin" placeholder="Min." class="filter-input">
+          <span>-</span>
+          <input type="number" name="kilometrajeMax" placeholder="Máx." class="filter-input">
+        </div>
+      </div>
       <button type="submit">Buscar</button>
+      <button type="reset">Limpiar filtros</button>
     </form>
     
     <div id="resultadosVehiculos">
