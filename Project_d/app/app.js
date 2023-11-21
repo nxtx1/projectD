@@ -491,11 +491,11 @@ app.get('/api/buscarVehiculos', async (req, res) => {
 
 
           if (marca) {
-            query += ' AND ma_id_marca = ?';
+            query += ' AND ma.id_marca = ?';
             params.push(marca);
           }
           if (modelo) {
-            query += ' AND m_id_modelo = ?';
+            query += ' AND m.id_modelo = ?';
             params.push(modelo);
           }
           if (anoInicio) {

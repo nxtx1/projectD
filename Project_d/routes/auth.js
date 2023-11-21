@@ -110,14 +110,14 @@ router.post('/logout', (req, res) => {
 router.get('/status', verifyToken, async (req, res) => {
     try {
         const userId = req.user.id;
-        const [results] = await pool.query('SELECT nombre_usuario FROM usuario WHERE id_usuario = ?', [userId]);
+        const [results] = await pool.query('SELECT nombre_usuario, rol FROM usuario WHERE id_usuario = ?', [userId]);
         const user = results[0];
 
         if (!user) {
             return res.status(404).json({ loggedIn: false });
         }
 
-        return res.json({ loggedIn: true, username: user.nombre_usuario });
+        return res.json({ loggedIn: true, username: user.nombre_usuario, rol: user.rol });
     } catch (error) {
         return res.status(500).json({ loggedIn: false, message: 'An error occurred', error });
     }
