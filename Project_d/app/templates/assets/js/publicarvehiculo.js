@@ -80,25 +80,28 @@ async function enviarFormulario(event) {
     }
 
     try {
-        // Realizar la solicitud POST al servidor
         const response = await fetch('/create-post', {
             method: 'POST',
-            body: formData // FormData se enviará con el tipo de contenido adecuado automáticamente
+            body: formData
         });
 
-        // Verificar si el envío fue exitoso
         if (response.ok) {
             const result = await response.json();
             console.log('Resultado:', result);
-            // Aquí podrías redirigir al usuario o mostrar un mensaje de éxito
+            
+            // Mostrar mensaje al usuario
+            alert('Tu publicación ha sido creada y está pendiente de aprobación.');
+
+            // Opcionalmente, redirigir al usuario o actualizar la página
+            // window.location.href = 'ruta-a-página-de-confirmación';
         } else {
-            // Manejar errores si la respuesta no fue exitosa
             const errorResult = await response.json();
             console.error('Error al enviar formulario:', errorResult);
+            alert('Hubo un error al enviar la publicación. Por favor, inténtalo de nuevo.');
         }
     } catch (error) {
-        // Capturar errores de red o del servidor
         console.error('Error de red o del servidor:', error);
+        alert('Error de conexión. Por favor, verifica tu conexión a internet.');
     }
 }
 

@@ -146,11 +146,11 @@ router.post('/create-post', verifyToken, upload.single('vehicleImage'), async (r
         }
         // Si no hay duplicados, procede a insertar la nueva publicación, incluyendo la imagen
         const [insertResult] = await pool.query(
-            'INSERT INTO vehiculo (descripcion, kilometraje, precio, combustible, transmision, ano, usuario_id_usuario, modelo_id_modelo, comuna_id_comuna, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            'INSERT INTO vehiculo (descripcion, kilometraje, precio, combustible, transmision, ano, usuario_id_usuario, modelo_id_modelo, comuna_id_comuna, foto, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "pendiente")',
             [descripcion, kilometraje, precio, combustible, transmision, ano, userId, modelo_id_modelo, comuna_id_comuna, imageBuffer]
         );
         
-        res.status(200).json({ message: 'Publicación creada exitosamente.', id: insertResult.insertId });
+
     } catch (error) {
         console.error(error); // Registra el error en el log del servidor
         res.status(500).json({ message: 'Error al crear la publicación', error });

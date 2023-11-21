@@ -1,0 +1,43 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.contenedor {
+    width: 80%;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.titulo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.imagen-vehiculo {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.detalles {
+    margin-top: 20px;
+}
+
+.detalle {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.descripcion {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #666;
+}

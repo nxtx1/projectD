@@ -27,6 +27,9 @@ app.get('/login-register', (req, res) => {
 app.get('/home', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'Home.html'));
 });
+app.get('/publicacionespendientes', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'publicacionespendientes.html'));
+});
 
 app.post('/logout', (req, res) => {
   res.cookie('token', '', { expires: new Date(0) }); // Establece la cookie de token a una vacía y con una fecha de expiración pasada
@@ -153,6 +156,7 @@ app.get('/api/vehiculos/:id', async (req, res) => {
             JOIN modelo ON vehiculo.modelo_id_modelo = modelo.id_modelo
             JOIN marca ON modelo.marca_id_marca = marca.id_marca
         WHERE 
+
             vehiculo.usuario_id_usuario = ?`, [userId]
         );
 
@@ -367,7 +371,15 @@ app.post('/api/roles/:id/cambiar-estado', authModule.verifyToken, verificarRoles
 app.get('/api/marcas', async (req, res) => {
   try {
     console.log('Obteniendo marcas...'); // Nuevo
-    const [marcas] = await pool.query('SELECT DISTINCT ma.id_marca, ma.marca FROM vehiculo v JOIN modelo mo ON v.modelo_id_modelo = mo.id_modelo JOIN marca ma ON mo.marca_id_marca = ma.id_marca ORDER BY ma.marca');
+    const [marcas] = await pool.query(`
+    SELECT DISTINCT
+      ma.id_marca, 
+      ma.marca 
+      FROM vehiculo v 
+      JOIN modelo mo ON v.modelo_id_modelo = mo.id_modelo 
+      JOIN marca ma ON mo.marca_id_marca = ma.id_marca 
+      WHERE v.estado = 'aprobado'
+      ORDER BY ma.marca`);
     console.log('Marcas obtenidas:', marcas); // Nuevo
     res.json(marcas.map(marca => ({ id: marca.id_marca, nombre: marca.marca })));
   } catch (error) {
@@ -386,7 +398,7 @@ app.get('/api/modelos/:marcaId', async (req, res) => {
     FROM modelo mo
     JOIN vehiculo v ON mo.id_modelo = v.modelo_id_modelo
     JOIN marca ma ON mo.marca_id_marca = ma.id_marca
-    WHERE ma.id_marca = ?
+    WHERE ma.id_marca = ? AND v.estado = 'aprobado'
     GROUP BY mo.id_modelo, mo.modelo`, [marcaId]);
     console.log('Modelos obtenidos:', modelos); // Nuevo
     res.json(modelos);
@@ -405,7 +417,8 @@ app.get('/api/anos/:modeloId', async (req, res) => {
     const [anos] = await pool.query(`
     SELECT v.ano
     FROM vehiculo v
-    WHERE v.modelo_id_modelo = ?
+    WHERE v.modelo_id_modelo = ? 
+    AND v.estado = 'aprobado'
     ORDER BY v.ano DESC`, [modeloId]);
     console.log('Años obtenidos:', anos); // Nuevo
     res.json(anos);
@@ -436,7 +449,7 @@ app.get('/api/buscarVehiculos', async (req, res) => {
     JOIN modelo m ON v.modelo_id_modelo = m.id_modelo
     JOIN marca ma ON m.marca_id_marca = ma.id_marca
     LEFT JOIN mantencion man ON v.id_vehiculo = man.vehiculo_id_vehiculo
-          WHERE 1=1`;
+          WHERE 1=1 AND v.estado = 'Aprobado'`;
 
       const params = [];
 
@@ -540,6 +553,80 @@ app.get('/api/fechas', async (req, res) => {
       res.status(500).json({ message: 'No se pudieron obtener las fechas disponibles', error });
   }
 });
+
+
+
+app.get('/vehiculos-pendientes', async (req, res) => {
+  try {
+      let query = `
+      SELECT 
+      v.id_vehiculo,
+      v.ano,
+      v.kilometraje,
+      v.precio,
+      v.transmision,
+      v.foto,
+      v.estado,
+      v.fecha_publicacion,
+      m.modelo,
+      ma.marca
+    FROM vehiculo v
+    JOIN modelo m ON v.modelo_id_modelo = m.id_modelo
+    JOIN marca ma ON m.marca_id_marca = ma.id_marca
+    LEFT JOIN mantencion man ON v.id_vehiculo = man.vehiculo_id_vehiculo
+          WHERE 1=1 AND v.estado = 'pendiente'`;
+
+      const params = [];
+
+      const [vehiculos] = await pool.query(query, params);
+      
+      // Convertir la foto BLOB a una cadena base64 para cada vehículo
+      const vehiculosConFotoBase64 = vehiculos.map(vehiculo => {
+        return {
+          ...vehiculo,
+          foto: vehiculo.foto ? Buffer.from(vehiculo.foto).toString('base64') : null
+        };
+      });
+      
+      res.json(vehiculosConFotoBase64);
+  } catch (error) {
+      console.error('Error al buscar vehículos:', error);
+      res.status(500).send('Error en el servidor');
+  }
+});
+
+app.post('/aprobar-vehiculo/:id', async (req, res) => {
+  const idVehiculo = req.params.id;
+
+  try {
+    // Código para actualizar la base de datos
+    // Esto es un ejemplo y dependerá de tu configuración de base de datos
+    const query = 'UPDATE vehiculo SET estado = "Aprobado" WHERE id_vehiculo = ?';
+    // Suponiendo que 'db' es tu conexión a la base de datos
+    await pool.query(query, [idVehiculo]);
+
+    res.json({ message: `Vehículo con ID ${idVehiculo} aprobado.` });
+  } catch (error) {
+    console.error('Error al aprobar el vehículo:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
+
+app.post('/rechazar-vehiculo/:id', async (req, res) => {
+  const idVehiculo = req.params.id;
+
+  try {
+    // Código para eliminar el registro de la base de datos
+    const query = 'DELETE FROM vehiculo WHERE id_vehiculo = ?';
+    await pool.query(query, [idVehiculo]);
+
+    res.json({ message: `Vehículo con ID ${idVehiculo} rechazado y eliminado.` });
+  } catch (error) {
+    console.error('Error al rechazar el vehículo:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
+
 
 
 const PORT = process.env.PORT || 3000;

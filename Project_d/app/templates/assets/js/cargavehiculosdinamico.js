@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
       formularioPublicarVehiculo.addEventListener('submit', function(event) {
         event.preventDefault();
 
-        Swal.fire("Tu vehículo ha sido publicado con éxito!",
+        Swal.fire("Tu publicación ha sido creada y está pendiente de aprobación.",
         ).then(result => {
             if (result.isConfirmed) {
                 // Limpia los campos del formulario

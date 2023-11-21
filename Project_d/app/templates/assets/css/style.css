@@ -185,6 +185,13 @@ h6,
     color: var(--light);
 }
 
+.rent-item:hover span, .rent-item.active span {
+    color: var(--light);
+}
+
+.rent-item span {
+    transition: .5s;
+}
 .team-item {
     padding: 30px 30px 0 30px;
     text-align: center;
@@ -334,3 +341,6 @@ html {
     /* Otros estilos que desees agregar */
   }
   
+.p{
+    background-color: #F4F5F8;
+}
