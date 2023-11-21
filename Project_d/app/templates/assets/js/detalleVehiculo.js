@@ -6,8 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(response => response.json())
     .then(vehiculo => {
       // Ahora actualiza los elementos de tu página con la información del vehículo
-      document.getElementById('nombre-vehiculo').textContent = `${vehiculo.marca} ${vehiculo.modelo}`;
+      document.getElementById('nombre-vehiculo').textContent = `${vehiculo.ano} ${vehiculo.marca} ${vehiculo.modelo}`;
       document.getElementById('imagen-vehiculo').src = vehiculo.foto;
+      document.getElementById('imagen-vehiculo').classList.add('sombreado');
       document.getElementById('modelo-vehiculo').textContent = vehiculo.modelo;
       document.getElementById('ano-vehiculo').textContent = vehiculo.ano;
       document.getElementById('transmision-vehiculo').textContent = vehiculo.transmision === 1 ? 'Automático' : 'Manual';

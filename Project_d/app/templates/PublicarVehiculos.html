@@ -1,14 +1,36 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Publicación de Vehículos - Royal Cars</title>
-    <!-- Aquí puedes agregar el enlace a tu archivo CSS -->
+    <meta charset="utf-8">
+    <title>AutoMarket</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Rubik&display=swap" rel="stylesheet"> 
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="/assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/formulariopubliarautos.css" rel="stylesheet">
+    <link href="assets/css/cssautospublicos.css" rel="stylesheet">
 </head>
+
 <body>
 
-<<<<<<< HEAD
 
 
     <!-- Navbar Start -->
@@ -25,9 +47,9 @@
             <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
                 <div class="navbar-nav ml-auto py-0">
                     <a href="Home.html" class="nav-item nav-link active">Inicio</a>
-                    <a href="#nuestros-servicios" class="nav-item nav-link">Servicio</a>
+                    <a href="Home.html#nuestros-servicios" class="nav-item nav-link">Servicio</a>
                     <a href="autos.html" class="nav-item nav-link">Autos</a>
-                    <a href="about.html" class="nav-item nav-link">Sobre nosotros</a>
+                    <a href="nosotros.html" class="nav-item nav-link">Sobre nosotros</a>
                     <!-- Elementos para usuario no logueado -->
                     <a href="Login-register.html" class="nav-item nav-link" id="loginRegisterLink">Inicia Sesión/Registrate</a>
                     <!-- Elementos para usuario logueado -->
@@ -35,7 +57,7 @@
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Mi cuenta
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="customDropdownMenu">
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="PublicarVehiculos.html">Publica tu auto</a>
                             <a class="dropdown-item" href="mantencion.html">Mantención</a>
                             <a class="dropdown-item" href="mantencionesUsuario.html">Mis mantenciones</a>
@@ -48,76 +70,15 @@
             </div>
         </nav>
     </div>
-  </div>
+</div>
 <!-- Navbar End -->
-=======
-    <!-- Cabecera -->
-    <header>
-        <div class="contact-info">
-            <span>📞 +012 345 6789</span> | <span>✉️ info@example.com</span>
-        </div>
-        <nav>
-            <div class="logo">ROYAL CARS</div>
-            <ul class="menu">
-                <li><a href="#">HOME</a></li>
-                <li><a href="#">ABOUT</a></li>
-                <li><a href="#">SERVICE</a></li>
-                <li><a href="#">CARS</a></li>
-                <li><a href="#">PAGES</a></li>
-                <li><a href="#">CONTACT</a></li>
-            </ul>
-            <div class="auth">
-                <button>Iniciar Sesión</button>
-                <button id="logoutButton">Cerrar Sesión</button>
-            </div>
-        </nav>
-    </header>
->>>>>>> parent of 38b91a9 (formulario listo sin mensajes en pantalla)
 
    <!-- Sección de publicación de vehículos -->
    <section class="publish-vehicle">
-    <h1>Publicar un Vehículo</h1>
+    <h1>Publicar un vehículo</h1>
 
     <!-- Formulario para la publicación -->
-    <form id="publishVehicleForm">
-        <div class="input-group">
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
-        </div>
-
-        <div class="input-group">
-            <label for="kilometraje">Kilometraje:</label>
-            <input type="number" id="kilometraje" name="kilometraje" required>
-        </div>
-
-        <div class="input-group">
-            <label for="precio">Precio:</label>
-            <input type="number" id="precio" name="precio" required>
-        </div>
-
-        <div class="input-group">
-            <label for="combustible">Combustible:</label>
-            <select id="combustible" name="combustible" required>
-                <option value="">Seleccione el tipo de combustible</option>
-                <option value="0">Bencinero</option>
-                <option value="1">Diésel</option>
-            </select>
-        </div>
-        
-        <div class="input-group">
-            <label for="transmision">Transmisión:</label>
-            <select id="transmision" name="transmision" required>
-                <option value="">Seleccione el tipo de transmisión</option>
-                <option value="0">Manual</option>
-                <option value="1">Automática</option>
-            </select>
-        </div>
-        
-
-        <div class="input-group">
-            <label for="ano">Año:</label>
-            <input type="number" id="ano" name="ano" required>
-        </div>
+    <form id="publishVehicleForm" enctype="multipart/form-data">
 
         <div class="input-group">
             <label for="marca-id">Marca:</label>
@@ -131,6 +92,39 @@
             <select id="modelo-id" name="modeloId" required>
                 <!-- Las opciones de modelo se cargarán aquí -->
             </select>
+        </div>
+
+        <div class="input-group">
+            <label for="ano">Año:</label>
+            <input type="number" id="ano" name="ano" required>
+        </div>
+
+        <div class="input-group">
+            <label for="transmision">Transmisión:</label>
+            <select id="transmision" name="transmision" required>
+                <option value="">Seleccione el tipo de transmisión</option>
+                <option value="0">Manual</option>
+                <option value="1">Automática</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="kilometraje">Kilometraje:</label>
+            <input type="number" id="kilometraje" name="kilometraje" required>
+        </div>
+        
+        <div class="input-group">
+            <label for="combustible">Combustible:</label>
+            <select id="combustible" name="combustible" required>
+                <option value="">Seleccione el tipo de combustible</option>
+                <option value="0">Bencinero</option>
+                <option value="1">Diésel</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" name="precio" required>
         </div>
 
         <div class="input-group">
@@ -148,17 +142,83 @@
         </div>
 
         <div class="input-group">
-            <label for="vehicle-image">Imagen del Vehículo:</label>
-            <input type="file" id="vehicle-image" name="vehicleImage" accept="image/*" required>
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="4" maxlength="120" required=""></textarea>
         </div>
+
+        <div class="input-group">
+            <div class="upload-photo-container" onclick="document.getElementById('vehicle-image').click();">
+                <div class="upload-photo-button">
+                    <i class="fas fa-plus"></i>
+                    <span>Agregar imágenes</span>
+                </div>
+                <input type="file" id="vehicle-image" name="vehicleImage" accept="image/*" class="upload-input" multiple style="display: none;" onchange="handleImageUpload(event)">
+            </div>
+            <div id="images-preview-container"></div>
+        </div>
+        
 
         <button type="submit">Publicar Vehículo</button>
     </form>
 </section>
 
+   <div class="container-detalle vehiculo-detalle">
+    <h1 id="preview-title">Modelo del Vehículo</h1>
 
+    <!-- Flex Container for Image and Details -->
+    <div class="flex-container">
+        <!-- Image Container -->
+        <div class="image-container">
+            <img id="preview-image" src="" />
+        </div>
+        <!-- Details Container -->
+        <div class="details-container">
+            <h1>Características</h1>
+            <p><strong>Modelo:</strong> <span id="preview-model"></span></p>
+            <p><strong>Año:</strong> <span id="preview-year"></span></p>
+            <p><strong>Transmisión:</strong> <span id="preview-transmission"></span></p>
+            <p><strong>Kilometraje:</strong> <span id="preview-mileage"></span></p>
+            <p><strong>Combustible:</strong> <span id="preview-fuel"></span></p>
+            <p><strong>Precio:</strong> <span id="preview-price"></span></p>
+            <h1>Descripción</h1>
+            <p><span id="preview-description"></span></p>
+        </div>
+    </div>
+</div>
+</div>
+
+<footer class="container-fluid bg-secondary text-light py-4">
+    <div class="container text-center">
+    
+        <p class="mb-2"><i class="fa fa-map-marker-alt mr-2"></i>3452 Las Catalpas Vitacura, Santiago, Chile</p>
+        <p class="mb-2"><i class="fa fa-phone-alt mr-2"></i>+56957722451</p>
+        <p><i class="fa fa-envelope mr-2"></i>contacto@automarket.com</p>
+        <div>
+            <p class="mb-2">© AutoMarket. Todos los derechos reservados.</p>
+        </div>
+    </div>
+   </footer>
+
+   
     <!-- Aquí puedes agregar el footer y otras secciones adicionales si lo deseas -->
 <script src="assets/js/usuario.js"></script>
 <script src="assets/js/publicarvehiculo.js"></script>
+   <!-- JavaScript Libraries -->
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+   <script src="assets/lib/easing/easing.min.js"></script>
+   <script src="assets/lib/waypoints/waypoints.min.js"></script>
+   <script src="assets/lib/owlcarousel/owl.carousel.min.js"></script>
+   <script src="assets/lib/tempusdominus/js/moment.min.js"></script>
+   <script src="assets/lib/tempusdominus/js/moment-timezone.min.js"></script>
+   <script src="assets/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+
+   <script src="/assets/js/usuario.js"></script>
+   <!-- Template Javascript -->
+   <script src="/assets/js/sesion.js"></script>
+   <script src="/assets/js/cargavehiculosdinamico.js"></script> 
+   <script src="/assets/js/filtroBusqueda.js"></script> 
 </body>
 </html>

@@ -67,8 +67,9 @@ main{
 }
 .caja__trasera button:hover {
     background-color: white;
-    color: #46A2FD;
+    color: #F77D0A;
 }
+
 
 /*FORMULARIOS VIPEROS*/
 .contenedor__login-register{
@@ -95,10 +96,17 @@ main{
     font-size: 30px;
     text-align: center;
     margin-bottom: 20px;
-    color: #46A2FD;
+    color: #F77D0A;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.8em;
+    margin-top: 5px;
 }
 
 .contenedor__login-register form input{
+    position: relative;
     width: 100%;
     margin-top: 20px;
     padding: 10px;
@@ -107,12 +115,17 @@ main{
     font-size: 16px;
     outline: none;
 }
+
+.contenedor__login-register form input.input-error {
+    border: 2px solid red;
+}
+
 .contenedor__login-register form button{
     padding: 10px 40px;
     margin-top: 40px;
     border: none;
     font-size: 14px;
-    background: #46A2FD;
+    background: #F77D0A;
     color: white;
     cursor: pointer;
     outline: none;

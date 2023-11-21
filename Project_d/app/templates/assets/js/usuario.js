@@ -20,16 +20,8 @@ document.addEventListener("DOMContentLoaded", function() {
             } else {
                 console.error("Elemento 'usernameDisplay' no encontrado");
             }
-
-            // Ocultar mensaje de bienvenida después de 5 segundos
-            setTimeout(function() {
-                const welcomeMessage = document.getElementById('welcomeMessage');
-                if (welcomeMessage) {
-                    welcomeMessage.style.display = 'none';
-                } else {
-                    console.error("Elemento 'welcomeMessage' no encontrado");
-                }
-            }, 5000);
+            // mensaje
+              
         } else {
             // Usuario no está logueado
             if (loginButton) loginButton.style.display = 'block';
@@ -51,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => {
                 if (response.ok) {
                     localStorage.removeItem('token');
-                    window.location.href = 'http://localhost:3000/';
                 } else {
                     console.error('Failed to log out');
                 }
@@ -60,8 +51,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.error('Error:', error);
             });
         });
-    } else {
-        console.error("Elemento 'logoutButton' no encontrado");
     }
 
     // Botón de inicio de sesión
@@ -69,7 +58,5 @@ document.addEventListener("DOMContentLoaded", function() {
         loginButton.addEventListener('click', function() {
             window.location.href = '/Login-register.html';
         });
-    } else {
-        console.error("Elemento 'loginButton' no encontrado");
     }
 });

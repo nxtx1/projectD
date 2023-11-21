@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch('/api/marcas')
       .then(response => response.json())
       .then(marcas => {
-        console.log('Marcas cargadas:', marcas); // Nuevo
         const marcaSelect = document.getElementsByName('marca')[0];
         marcaSelect.innerHTML = '<option value="">Selecciona Marca</option>';
         marcas.forEach(marca => {

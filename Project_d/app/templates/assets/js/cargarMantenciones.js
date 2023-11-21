@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const tabla = document.getElementById('tablaMantenciones').getElementsByTagName('tbody')[0];
         mantenciones.forEach((mantencion) => {
           const fila = tabla.insertRow();
+          fila.setAttribute('eliminarMan', mantencion.id_mantencion);
           fila.insertCell().textContent = mantencion.id_mantencion;
           fila.insertCell().textContent = new Date(mantencion.fecha_mantencion).toLocaleString();
           fila.insertCell().textContent = mantencion.marca + '  ' + mantencion.modelo;
@@ -26,26 +27,59 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   });
   
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+});
+
   function eliminarMantencion(idMantencion) {
     console.log(`Solicitando eliminación de la mantención ID ${idMantencion}`);
-    if (confirm('¿Estás seguro de que quieres eliminar esta mantención?')) {
-      fetch(`/eliminar-mantencion/${idMantencion}`, { method: 'DELETE' })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          console.log('Mantención eliminada en el servidor.');
-          return response.json();
-        })
-        .then(result => {
-          console.log('Respuesta del servidor tras eliminación:', result);
-          alert('Mantención eliminada con éxito.');
-          location.reload();
-        })
-        .catch(error => {
-          console.error('Error al eliminar la mantención:', error);
-          alert('No se pudo eliminar la mantención.');
-        });
-    }
-  }
-  
+
+    Swal.fire({
+        title: "¿Estás seguro?",
+        text: "¡No podrás revertir esto!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sí, eliminarlo!",
+        cancelButtonText: "Cancelar"
+      }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/eliminar-mantencion/${idMantencion}`, { method: 'DELETE' })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(result => {
+                    try {
+                        const filaParaEliminar = document.querySelector(`[eliminarMan="${idMantencion}"]`);
+                        if (filaParaEliminar) {
+                            filaParaEliminar.remove();
+                            Toast.fire({
+                              icon: 'success',
+                              title: 'La mantención ha sido eliminada'
+                          });
+                        } else {
+                            console.error('No se encontró la fila para eliminar');
+                        }
+                    } catch (error) {
+                        console.error('Error al eliminar la fila del DOM:', error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al eliminar la mantención:', error);
+                    Swal.fire('Error!', 'No se pudo eliminar la mantención.', 'error');
+                });
+        }
+    });
+}

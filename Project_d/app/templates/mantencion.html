@@ -12,6 +12,7 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Rubik&display=swap" rel="stylesheet"> 
+
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
 
@@ -45,9 +46,9 @@
             <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
                 <div class="navbar-nav ml-auto py-0">
                     <a href="Home.html" class="nav-item nav-link active">Inicio</a>
-                    <a href="#nuestros-servicios" class="nav-item nav-link">Servicio</a>
+                    <a href="Home.html#nuestros-servicios" class="nav-item nav-link">Servicio</a>
                     <a href="autos.html" class="nav-item nav-link">Autos</a>
-                    <a href="about.html" class="nav-item nav-link">Sobre nosotros</a>
+                    <a href="nosotros.html" class="nav-item nav-link">Sobre nosotros</a>
                     <!-- Elementos para usuario no logueado -->
                     <a href="Login-register.html" class="nav-item nav-link" id="loginRegisterLink">Inicia Sesión/Registrate</a>
                     <!-- Elementos para usuario logueado -->
@@ -56,6 +57,8 @@
                             Mi cuenta
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="PublicarVehiculos.html">Publica tu auto</a>
+                            <a class="dropdown-item" href="mantencion.html">Mantención</a>
                             <a class="dropdown-item" href="mantencionesUsuario.html">Mis mantenciones</a>
                             <a class="dropdown-item" href="Mis_publicaciones.html">Mis publicaciones</a>
                             <div class="dropdown-divider"></div>
@@ -72,21 +75,21 @@
 <div id="mantencionContainer" class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card-mantencion">
-                <div id="mantencion-header" class="card-header-mantencion">
-                    <h2 class="mantencion-title">Agendar Mantención</h2>
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Agendar Mantención</h2>
                 </div>
-                <div class="card-body-mantencion">
+                <div class="card-body">
                     <!-- El formulario para agendar la mantención -->
                     <form id="mantencionForm" action="/crear-mantencion" method="post">
                         <div class="mb-3">
-                            <label for="fecha_mantencion" class="form-label">Hora de Mantención:</label>
+                            <label for="fecha_mantencion" class="form-label">Hora de mantención:</label>
                             <select id="fecha_mantencion" name="fecha_mantencion" class="form-select" required>
                                 <!-- Las opciones de horas se cargarán desde el backend o con JavaScript -->
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="vehiculo_id_vehiculo" class="form-label">Selecciona tu Vehículo:</label>
+                            <label for="vehiculo_id_vehiculo" class="form-label">Selecciona tu vehículo:</label>
                             <select id="vehiculo_id_vehiculo" name="vehiculo_id_vehiculo" class="form-select" required>
                                 <!-- Opciones de vehículos cargadas desde la base de datos -->
                             </select>
@@ -106,6 +109,7 @@
 <!-- Bootstrap JS Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
    <!-- JavaScript Libraries -->
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
    <script src="assets/lib/easing/easing.min.js"></script>
@@ -117,9 +121,9 @@
 
 
    <script src="/assets/js/usuario.js"></script>
-   <script src="/assets/js/mensaje.js"></script>
    <!-- Template Javascript -->
    <script src="/assets/js/sesion.js"></script>
+   
 </body>
 <footer class="container-fluid bg-secondary text-light py-4">
  <div class="container text-center">

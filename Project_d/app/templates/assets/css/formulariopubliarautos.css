@@ -1,12 +1,11 @@
-/* Estilos generales */
 body {
     margin: 0;
     padding: 0;
-    background: #f4f4f4; /* Cambie este color de fondo para que coincida con su diseño */
+    background: #F0F2F5;
 }
 
 header {
-    background: #333; /* Cambie este color de fondo para que coincida con su diseño */
+    background: #4267B2;
     color: #fff;
     padding: 10px 20px;
 }
@@ -27,35 +26,45 @@ header {
 }
 
 .auth button {
-    background: #f60; /* Cambie este color de fondo para que coincida con su diseño */
+    background: #4267B2; 
     border: none;
     padding: 10px 20px;
     color: white;
     margin-left: 10px;
     cursor: pointer;
+    border-radius: 5px;
 }
 
 /* Estilos de la sección de publicación de vehículos */
+
 .publish-vehicle {
+    max-height: 100%; /* Ajusta a la altura que prefieras */
+    overflow-y: auto;
     background: #fff;
     padding: 20px;
+    width: 30%;
     margin-top: 20px;
+    margin-left: 10px;
+    margin-bottom: 20px;;
+    float: left;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 20px; /* Bordes redondeados */
 }
 
 .publish-vehicle h1 {
-    color: #333; /* Cambie este color para que coincida con su diseño */
-    font-size: 2.4em;
+    color: #4b4f56;
+    font-size: 1.8em;
     margin-bottom: 20px;
 }
 
 .input-group {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .input-group label {
     display: block;
     margin-bottom: 5px;
-    color: #333; /* Cambie este color para que coincida con su diseño */
+    color: #606770;
 }
 
 .input-group input[type="text"],
@@ -65,8 +74,9 @@ header {
 .input-group textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ddd; /* Cambie este color para que coincida con su diseño */
-    border-radius: 5px;
+    border: 1px solid #dddfe2; /* Gris claro de los bordes al estilo de Facebook */
+    border-radius: 6px;
+    box-sizing: border-box; /* Asegura que el padding no afecte al ancho total */
 }
 
 .input-group textarea {
@@ -74,19 +84,20 @@ header {
 }
 
 button[type="submit"] {
-    background: #f60; /* Cambie este color de fondo para que coincida con su diseño */
+    background: #F77D0A; /* Azul característico de Facebook */
     border: none;
     padding: 10px 20px;
     color: white;
     font-size: 1.2em;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 6px;
     display: block;
     width: 100%;
+    margin-top: 10px; /* Separación del último input */
 }
 
 button[type="submit"]:hover {
-    background: #e55; /* Cambie este color para un efecto hover que coincida con su diseño */
+    background: #d37218; /* Azul un poco más oscuro para el efecto hover */
 }
 
 /* Responsive design para pantallas más pequeñas */
@@ -101,4 +112,68 @@ button[type="submit"]:hover {
         width: 100%;
         margin-bottom: 10px;
     }
+}
+
+.upload-photo-container {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.upload-photo-button {
+    display: inline-block;
+    padding: 8px;
+    background: #eee;
+    border: 1px dashed #ccc;
+    margin-right: 8px;
+}
+
+#images-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.image-preview-item {
+    width: 100px;
+    height: 100px;
+    margin-right: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+#preview-image {
+    width: 100%;
+    height: auto;
+}
+
+.image-container {
+    margin-right: 30px;
+}
+
+.details-container {
+    overflow: hidden; /* O 'auto' si quieres permitir desplazamiento */
+    word-wrap: break-word; /* Asegura que las palabras largas pasen a la línea siguiente */
+    width: 100%; /* O un valor fijo si necesitas un ancho específico */
+    max-width: 250px;
+}
+
+#preview-description {
+    display: block; /* Hace que el span se comporte como un bloque */
+    white-space: pre-wrap; /* Asegura que los saltos de línea y espacios se respeten */
+    word-break: break-word; /* Para asegurar que las palabras no excedan el contenedor */
+}
+.container-detalle.vehiculo-detalle {
+    position: absolute;
+    margin: 1px;
+    width: 64%;
+    top: 120px;
+    right: 60px;
 }

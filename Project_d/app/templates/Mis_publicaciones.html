@@ -47,7 +47,7 @@
                     <a href="Home.html" class="nav-item nav-link active">Inicio</a>
                     <a href="#nuestros-servicios" class="nav-item nav-link">Servicio</a>
                     <a href="autos.html" class="nav-item nav-link">Autos</a>
-                    <a href="about.html" class="nav-item nav-link">Sobre nosotros</a>
+                    <a href="nosotros.html" class="nav-item nav-link">Sobre nosotros</a>
                     <!-- Elementos para usuario no logueado -->
                     <a href="Login-register.html" class="nav-item nav-link" id="loginRegisterLink">Inicia Sesión/Registrate</a>
                     <!-- Elementos para usuario logueado -->
@@ -55,11 +55,13 @@
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Mi cuenta
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="mantencionesUsuario.html">Mis mantenciones</a>
-                            <a class="dropdown-item" href="Mis_publicaciones.html">Mis publicaciones</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" id="logoutButton">Cerrar sesión</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="customDropdownMenu">
+                          <a class="dropdown-item" href="PublicarVehiculos.html">Publica tu auto</a>
+                          <a class="dropdown-item" href="mantencion.html">Mantención</a>
+                          <a class="dropdown-item" href="mantencionesUsuario.html">Mis mantenciones</a>
+                          <a class="dropdown-item" href="#">Mis publicaciones</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="#" id="logoutButton">Cerrar sesión</a>
                         </div>
                     </div>
                 </div>
@@ -104,6 +106,7 @@
 
 
     <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="assets/lib/easing/easing.min.js"></script>

@@ -31,3 +31,58 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+  const mantencionForm = document.getElementById('mantencionForm');
+  if (mantencionForm) {
+      mantencionForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          // Recopilar los datos del formulario
+          const formData = new FormData(mantencionForm);
+          const fechaMantencion = formData.get('fecha_mantencion');
+          const vehiculoId = formData.get('vehiculo_id_vehiculo');
+
+          try {
+              // Realizar la solicitud POST al servidor
+              const response = await fetch('/crear-mantencion', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      // Asegúrate de agregar aquí el token si es necesario
+                  },
+                  body: JSON.stringify({
+                      fecha_mantencion: fechaMantencion,
+                      vehiculo_id_vehiculo: vehiculoId
+                  })
+              });
+
+              const data = await response.json();
+
+              // Mostrar la alerta basada en la respuesta
+              if (response.ok) {
+                  Swal.fire({
+                      icon: 'success',
+                      title: '¡Éxito!',
+                      text: data.message
+                  }).then(() => {
+                      window.location.href = '/mantencionesUsuario.html'; // Redirige después de la alerta
+                  });
+              } else {
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'Oops...',
+                      text: data.message
+                  });
+              }
+          } catch (error) {
+              // Manejar errores de conexión, etc.
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: 'No se pudo conectar con el servidor'
+              });
+          }
+      });
+  }
+});
+
