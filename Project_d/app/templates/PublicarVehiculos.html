@@ -26,6 +26,7 @@
     <!-- Template Stylesheet -->
     <link href="/assets/css/style.css" rel="stylesheet">
     <link href="assets/css/formulariopubliarautos.css" rel="stylesheet">
+    <link href="assets/css/cssautospublicos.css" rel="stylesheet">
 </head>
 
 <body>
@@ -57,8 +58,10 @@
                             Mi cuenta
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="PublicarVehiculos.html">Publica tu auto</a>
+                            <a class="dropdown-item" href="mantencion.html">Mantención</a>
                             <a class="dropdown-item" href="mantencionesUsuario.html">Mis mantenciones</a>
-                            <a class="dropdown-item" href="#">Mis publicaciones</a>
+                            <a class="dropdown-item" href="Mis_publicaciones.html">Mis publicaciones</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#" id="logoutButton">Cerrar sesión</a>
                         </div>
@@ -76,11 +79,6 @@
 
     <!-- Formulario para la publicación -->
     <form id="publishVehicleForm" enctype="multipart/form-data">
-
-        <div class="input-group">
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
-        </div>
 
         <div class="input-group">
             <label for="marca-id">Marca:</label>
@@ -223,15 +221,4 @@
    <script src="/assets/js/cargavehiculosdinamico.js"></script> 
    <script src="/assets/js/filtroBusqueda.js"></script> 
 </body>
-<footer class="container-fluid bg-secondary text-light py-4">
- <div class="container text-center">
- 
-     <p class="mb-2"><i class="fa fa-map-marker-alt mr-2"></i>3452 Las Catalpas Vitacura, Santiago, Chile</p>
-     <p class="mb-2"><i class="fa fa-phone-alt mr-2"></i>+56957722451</p>
-     <p><i class="fa fa-envelope mr-2"></i>contacto@automarket.com</p>
-     <div>
-         <p class="mb-2">© AutoMarket. Todos los derechos reservados.</p>
-     </div>
- </div>
-</footer>
 </html>

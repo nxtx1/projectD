@@ -171,28 +171,6 @@ app.get('/api/vehiculos/:id', async (req, res) => {
     }
 });
 
-app.get('/detalle-vehiculo/:vehiculoId', authModule.verifyToken, async (req, res) => {
-  const { vehiculoId } = req.params;
-  const userId = req.user.id; // ID del usuario obtenido del token JWT
-
-  try {
-      const [vehiculos] = await pool.query(
-          'SELECT * FROM vehiculo WHERE id_vehiculo = ? AND usuario_id_usuario = ?', 
-          [vehiculoId, userId]
-      );
-
-      if (vehiculos.length > 0) {
-          res.sendFile(path.join(__dirname, 'templates', 'detalle-vehiculo-mispublicaciones.html'));
-      } else {
-          res.status(404).send('Vehículo no encontrado o no tiene permiso para verlo.');
-      }
-  } catch (error) {
-      console.error(error);
-      res.status(500).send('Error del servidor');
-  }
-});
-
-
   
 app.get('/vehiculo/:id', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'detalle-vehiculo.html'));
