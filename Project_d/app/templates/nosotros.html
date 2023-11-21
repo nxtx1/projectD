@@ -45,6 +45,125 @@
             <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
                 <div class="navbar-nav ml-auto py-0">
                     <a href="Home.html" class="nav-item nav-link">Inicio</a>
+                    <a href="#nuestros-servicios" class="nav-item nav-link">Servicio</a>
+                    <a href="autos.html" class="nav-item nav-link">Autos</a>
+                    <a href="nosotros.html" class="nav-item nav-link active">Sobre nosotros</a>
+                    <!-- Elementos para usuario no logueado -->
+                    <a href="Login-register.html" class="nav-item nav-link" id="loginRegisterLink">Inicia Sesión/Registrate</a>
+                    <!-- Elementos para usuario logueado -->
+                    <div class="nav-item dropdown" id="userAccountMenu" style="display: none;">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Mi cuenta
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="customDropdownMenu">
+                            <a class="dropdown-item" href="PublicarVehiculos.html">Publica tu auto</a>
+                            <a class="dropdown-item" href="mantencion.html">Mantención</a>
+                            <a class="dropdown-item" href="mantencionesUsuario.html">Mis mantenciones</a>
+                            <a class="dropdown-item" href="#">Mis publicaciones</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" id="logoutButton">Cerrar sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<!-- Navbar End -->
+    <section id="sobre-nosotros">
+        <div class="container" id="texto">
+            <div class="left-side">
+                <h2 class="title">Sobre nosotros</h2>
+        <p>En AutoMarket, nos apasiona proporcionar a nuestros clientes una experiencia excepcional en la búsqueda y adquisición de vehículos. Desde coches compactos hasta SUVs elegantes, ofrecemos una amplia gama de opciones para satisfacer tus necesidades y estilo de vida.</p>
+
+        <p>Con una sólida trayectoria en el mundo del automóvil, estamos comprometidos a brindar la máxima calidad y comodidad a cada comprador. Cada vehículo en nuestro automarket ha sido cuidadosamente seleccionado y sometido a rigurosas inspecciones para garantizar la excelencia.</p>
+
+        <p>Nuestra misión es hacer que la experiencia de comprar un automóvil sea emocionante y sin complicaciones. Utilizamos la última tecnología para proporcionar herramientas avanzadas de búsqueda y exploración virtual de vehículos, poniendo el poder de elección en tus manos.</p>
+    </div>
+    <div class="right-side">
+        <img src="https://acroadtrip.blob.core.windows.net/catalogo-imagenes/m/RT_V_6b8d809e846542f9a8b4ecf1114fdd33.jpg" alt="Imagen representativa">
+    </div>
+</div>
+    </section>
+    
+    <footer class="container-fluid bg-secondary text-light py-4">
+        <div class="container text-center">
+        
+            <p class="mb-2"><i class="fa fa-map-marker-alt mr-2"></i>3452 Las Catalpas Vitacura, Santiago, Chile</p>
+            <p class="mb-2"><i class="fa fa-phone-alt mr-2"></i>+56957722451</p>
+            <p><i class="fa fa-envelope mr-2"></i>contacto@automarket.com</p>
+            <div>
+                <p class="mb-2"><span class="copyright-symbol">©</span> AutoMarket. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer End -->
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/lib/easing/easing.min.js"></script>
+    <script src="assets/lib/waypoints/waypoints.min.js"></script>
+    <script src="assets/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="assets/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="assets/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="assets/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="/assets/js/sesion.js"></script>
+
+    
+    <script src="assets/js/usuario.js"></script>
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html><!DOCTYPE html>
+<html lang="es">
+    
+<head>
+        <meta charset="utf-8">
+        <title>AutoMarket</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    
+        <!-- Favicon -->
+        <link href="img/favicon.ico" rel="icon">
+    
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Rubik&display=swap" rel="stylesheet"> 
+    
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
+    
+        <!-- Libraries Stylesheet -->
+        <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+        <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    
+        <!-- Customized Bootstrap Stylesheet -->
+        <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    
+        <!-- Template Stylesheet -->
+        <link href="/assets/css/style.css" rel="stylesheet">
+
+        <link href="/assets/css/nosotros.css" rel="stylesheet">
+
+    </head>
+    
+    
+    <body>
+<!-- Navbar Start -->
+<div class="container-fluid position-relative nav-bar p-0">
+    <div class="position-relative" style="z-index: 9;">
+        <nav class="navbar navbar-expand-lg bg-secondary navbar-dark py-3 py-lg-0 pl-3 pl-lg-5">
+            <a href="" class="navbar-brand">
+                <h1 class="text-uppercase text-primary mb-1">AutoMarket</h1>
+            </a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
+                <div class="navbar-nav ml-auto py-0">
+                    <a href="Home.html" class="nav-item nav-link">Inicio</a>
                     <a href="Home.html#nuestros-servicios" class="nav-item nav-link">Servicio</a>
                     <a href="autos.html" class="nav-item nav-link">Autos</a>
                     <a href="nosotros.html" class="nav-item nav-link active">Sobre nosotros</a>
