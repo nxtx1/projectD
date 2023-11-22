@@ -52,6 +52,12 @@ app.get('/autos', (req, res) => {
 app.get('/htmlnuevo', (req, res) => {
   res.sendFile(path.join(__dirname, 'templates', 'htmlnuevo.html'));
 });
+app.get('/detalle-vehiculo-mispublicaciones/:vehiculoId', authModule.verifyToken, async (req, res) => {
+  // Aquí no necesitas buscar en la base de datos,
+  // solo sirves la página HTML que luego buscará los detalles por sí misma
+  res.sendFile(path.join(__dirname, 'templates', 'detalle-vehiculo-mispublicaciones.html'));
+});
+
 
 // Ejemplo de uso del middleware para una ruta que requiere autenticación
 app.get('/create-post', authModule.verifyToken, (req, res) => {
@@ -176,7 +182,7 @@ app.get('/api/vehiculos/:id', async (req, res) => {
     }
 });
 
-app.get('/detalle-vehiculo/:vehiculoId', authModule.verifyToken, async (req, res) => {
+app.get('/detalle-vehiculo-mispublicaciones/:vehiculoId', authModule.verifyToken, async (req, res) => {
   const { vehiculoId } = req.params;
   const userId = req.user.id; // ID del usuario obtenido del token JWT
 
