@@ -1,22 +1,22 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const urlParts = window.location.pathname.split('/');
-  const vehiculoId = urlParts[urlParts.length - 1]; // Obtiene el ID del vehículo de la URL
+let vehiculoId; // Declaración de la variable global
 
-  // Asegúrate de que la ruta aquí coincide con la que devuelve los datos del vehículo en tu servidor
-  fetch(`/api/vehiculos/${vehiculoId}`, { 
-      method: 'GET',
-      headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}` // Usa el token guardado en localStorage
-      }
-  })
-  .then(response => {
-      if (!response.ok) {
-          throw new Error('Error al cargar los detalles del vehículo');
-      }
-      return response.json();
-  })
-  .then(vehiculo => {
-      // Asegúrate de que los IDs de los elementos HTML coinciden con estos
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParts = window.location.pathname.split('/');
+    vehiculoId = urlParts[urlParts.length - 1]; // Asigna el valor a la variable global vehiculoId
+
+    fetch(`/api/vehiculos/${vehiculoId}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al cargar los detalles del vehículo');
+        }
+        return response.json();
+    })
+    .then(vehiculo => {
       document.getElementById('nombre-vehiculo').textContent = `${vehiculo.ano} ${vehiculo.marca} ${vehiculo.modelo}`;
       document.getElementById('imagen-vehiculo').src = vehiculo.foto;
       document.getElementById('imagen-vehiculo').classList.add('sombreado');
@@ -33,3 +33,30 @@ document.addEventListener('DOMContentLoaded', function() {
       // Aquí podrías manejar el error, tal vez mostrando un mensaje al usuario
   });
 });
+
+function eliminarVehiculo() {
+    if (!confirm('¿Estás seguro de que quieres eliminar esta publicación?')) {
+        return;
+    }
+
+    fetch(`/api/vehiculos/${vehiculoId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al eliminar el vehículo');
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert('Publicación eliminada correctamente.');
+        window.location.href = '/Mis_publicaciones.html';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('No se pudo eliminar la publicación.');
+    });
+}

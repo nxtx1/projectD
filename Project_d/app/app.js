@@ -214,6 +214,27 @@ app.get('/detalle-vehiculo-mispublicaciones/:vehiculoId', authModule.verifyToken
 
 
 
+app.delete('/api/vehiculos/:vehiculoId', authModule.verifyToken, async (req, res) => {
+  const vehiculoId = req.params.vehiculoId; // Corregido aquí
+  const userId = req.user.id;
+
+  try {
+    const [vehiculos] = await pool.query('SELECT * FROM vehiculo WHERE id_vehiculo = ? AND usuario_id_usuario = ?', [vehiculoId, userId]);
+    if (vehiculos.length === 0) {
+      return res.status(404).send('Vehículo no encontrado o no pertenece al usuario.');
+    }
+
+    await pool.query('DELETE FROM vehiculo WHERE id_vehiculo = ?', [vehiculoId]);
+    res.json({ message: 'Vehículo eliminado con éxito.' });
+  } catch (error) {
+    console.error('Error al eliminar el vehículo:', error);
+    res.status(500).json({ message: 'Error al eliminar el vehículo', error });
+  }
+});
+
+
+
+
   
 app.get('/vehiculo/:id', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'detalle-vehiculo.html'));
