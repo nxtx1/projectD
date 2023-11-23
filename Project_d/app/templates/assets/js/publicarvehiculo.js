@@ -65,6 +65,7 @@ async function enviarFormulario(event) {
     // Usa FormData para construir los datos del formulario
     const formData = new FormData();
     formData.append('descripcion', document.getElementById('descripcion').value);
+    formData.append('numero', document.getElementById('numero').value);
     formData.append('kilometraje', document.getElementById('kilometraje').value);
     formData.append('precio', document.getElementById('precio').value);
     formData.append('combustible', document.getElementById('combustible').value);

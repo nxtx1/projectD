@@ -7,7 +7,7 @@
 
 /* Estilo de los encabezados de la tabla */
 #tabla-mantenciones th {
-    background-color: #4CAF50; /* Color de fondo */
+    background-color: #2B2E4A; /* Color de fondo */
     color: white; /* Color del texto */
     font-family: 'Arial', sans-serif; /* Tipo de fuente */
     padding: 10px; /* Espaciado interno */
@@ -66,7 +66,7 @@
 
 /* Estilo del botón guardar de la modal */
 #guardarEstado {
-    background-color: #4CAF50; /* Color de fondo */
+    background-color: #2B2E4A; /* Color de fondo */
     color: white; /* Color del texto */
     padding: 10px 20px; /* Espaciado interno */
     margin: 10px 0; /* Margen superior e inferior */
@@ -75,6 +75,12 @@
 }
 
 /* Estilo del botón guardar al pasar el mouse */
-#guardarEstado:hover {
-    background-color: #45a049; /* Color de fondo al pasar el mouse */
-}
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333; /* Cambia esto al color de fondo que desees */
+    color: white; /* Cambia esto al color de texto que desees */
+    padding: 20px; /* Añade espaciado interior si lo necesitas */
+  }

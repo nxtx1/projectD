@@ -129,3 +129,45 @@ footer {
     left: 0;
     cursor: pointer;
 }
+
+/* Estilos base */
+.container-detalle {
+    padding: 20px;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.image-container,
+.details-container {
+    width: 100%;
+}
+
+/* Estilos para pantallas más grandes (por ejemplo, tabletas o computadoras de escritorio) */
+@media (min-width: 1000px) {
+    .flex-container {
+        flex-direction: row;
+    }
+
+    .image-container,
+    .details-container {
+        width: 50%;
+    }
+}
+
+/* Estilos para pantallas aún más grandes */
+@media (min-width: 1024px) {
+    .container-detalle {
+        padding: 50px;
+    }
+
+    .image-container {
+        padding-right: 20px;
+    }
+
+    .details-container {
+        padding-left: 20px;
+    }
+}

@@ -38,7 +38,7 @@
 <div class="container-fluid position-relative nav-bar p-0">
     <div class="position-relative" style="z-index: 9;">
         <nav class="navbar navbar-expand-lg bg-secondary navbar-dark py-3 py-lg-0 pl-3 pl-lg-5">
-            <a href="" class="navbar-brand">
+            <a href="Home.html" class="navbar-brand">
                 <h1 class="text-uppercase text-primary mb-1">AutoMarket</h1>
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
@@ -140,6 +140,11 @@
                 <!-- Las opciones de comuna se cargarán aquí -->
             </select>
         </div>
+        <div class="input-group">
+            <label for="numero">Número:</label>
+            <textarea id="numero" name="numero" rows="4" maxlength="25" required=""></textarea>
+        </div>
+
 
         <div class="input-group">
             <label for="descripcion">Descripción:</label>
@@ -214,11 +219,11 @@
    <script src="assets/lib/tempusdominus/js/moment-timezone.min.js"></script>
    <script src="assets/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-
-   <script src="/assets/js/usuario.js"></script>
-   <!-- Template Javascript -->
    <script src="/assets/js/sesion.js"></script>
+   <!-- Template Javascript -->
+
    <script src="/assets/js/cargavehiculosdinamico.js"></script> 
    <script src="/assets/js/filtroBusqueda.js"></script> 
+   <script src="/assets/js/numberFormatter.js"></script> 
 </body>
 </html>

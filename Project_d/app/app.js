@@ -27,7 +27,7 @@ app.get('/login-register', (req, res) => {
 app.get('/home', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'Home.html'));
 });
-app.get('/publicacionespendientes', (req, res) => {
+app.get('/publicacionespendientes', verificarRoleAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, 'templates', 'publicacionespendientes.html'));
 });
 
@@ -69,7 +69,7 @@ app.get('/mantencion', authModule.verifyToken, (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'mantencion.html'));
 });
 
-app.get('/mantenciones', authModule.verifyToken, verificarRolesPermitidos, (req, res) => {
+app.get('/mantenciones', authModule.verifyToken, verificarRolesPermitidos,  (req, res) => {
   // Solo los usuarios autenticados pueden acceder aquí
   res.sendFile(path.join(__dirname, 'templates', 'mantenciones.html'));
 });
@@ -78,7 +78,7 @@ app.get('/mantencionesUsuario', authModule.verifyToken, verificarRolesPermitidos
   // Solo los usuarios autenticados pueden acceder aquí
   res.sendFile(path.join(__dirname, 'templates', 'mantencionesUsuario.html'));
 });
-app.get('/rolUser', authModule.verifyToken, verificarRolesPermitidos, (req, res) => {
+app.get('/cuentas.html', authModule.verifyToken, verificarRoleAdmin, (req, res) => {
   // Solo los usuarios autenticados pueden acceder aquí
   res.sendFile(path.join(__dirname, 'templates', 'rolUser.html'));
 });
@@ -337,15 +337,20 @@ app.get('/api/vehiculos', async (req, res) => {
 
 
 
+  function verificarRolesPermitidos(req, res, next) {
+    // Asumiendo que los roles permitidos para realizar la acción son mecánico y administrador
+    const rolesPermitidos = [1,2]; // Array de IDs de roles permitidos
+  
+    if (req.user && rolesPermitidos.includes(req.user.rol)) {
+      next(); // El usuario tiene un rol permitido, puede continuar
+    } else {
+      res.status(403).json({ mensaje: 'No tiene permisos para realizar esta acción' });
+    }
+  }
 
-
-
-
-
-
-function verificarRolesPermitidos(req, res, next) {
+function verificarRoleAdmin(req, res, next) {
   // Asumiendo que los roles permitidos para realizar la acción son mecánico y administrador
-  const rolesPermitidos = [1, 2]; // Array de IDs de roles permitidos
+  const rolesPermitidos = [2]; // Array de IDs de roles permitidos
 
   if (req.user && rolesPermitidos.includes(req.user.rol)) {
     next(); // El usuario tiene un rol permitido, puede continuar
@@ -397,7 +402,7 @@ app.post('/api/mantenciones/:id/cambiar-estado', authModule.verifyToken, verific
   }
 });
 
-app.get('/api/rol', authModule.verifyToken, verificarRolesPermitidos, async (req, res) => {
+app.get('/api/rol', authModule.verifyToken, verificarRoleAdmin, async (req, res) => {
   try {
     const query = `SELECT * FROM usuario;`
     const [rol] = await pool.query(query);
@@ -649,7 +654,7 @@ app.get('/api/fechas', async (req, res) => {
 
 
 
-app.get('/vehiculos-pendientes', async (req, res) => {
+app.get('/vehiculos-pendientes', verificarRoleAdmin, async (req, res) => {
   try {
       let query = `
       SELECT 
@@ -688,7 +693,7 @@ app.get('/vehiculos-pendientes', async (req, res) => {
   }
 });
 
-app.post('/aprobar-vehiculo/:id', async (req, res) => {
+app.post('/aprobar-vehiculo/:id', verificarRoleAdmin, async (req, res) => {
   const idVehiculo = req.params.id;
 
   try {
@@ -705,7 +710,7 @@ app.post('/aprobar-vehiculo/:id', async (req, res) => {
   }
 });
 
-app.post('/rechazar-vehiculo/:id', async (req, res) => {
+app.post('/rechazar-vehiculo/:id', verificarRoleAdmin, async (req, res) => {
   const idVehiculo = req.params.id;
 
   try {

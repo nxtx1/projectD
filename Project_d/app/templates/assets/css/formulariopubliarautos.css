@@ -177,3 +177,43 @@ button[type="submit"]:hover {
     top: 120px;
     right: 60px;
 }
+
+@media only screen and (max-width: 1155px) {
+    .publish-vehicle {
+        width: 96%;
+    }
+}
+
+@media only screen and (max-width: 1155px) {
+    .container-detalle.vehiculo-detalle {
+        display: none; /* Esto ocultará la vista previa /
+    }
+}
+
+@media screen and (max-width: 600px) {
+    / Estilos para pantallas menores a 600px */
+}
+
+
+@media (max-width: 991.98px) {
+    .page-header {
+        height: 300px;
+    }
+}
+@media (max-width: 576px) {
+    .carousel-caption h4 {
+        font-size: 18px;
+        font-weight: 500 !important;
+    }
+
+    .carousel-caption h1 {
+        font-size: 30px;
+        font-weight: 600 !important;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .navbar-dark .navbar-nav .nav-link  {
+        padding: 10px 15px;
+    }
+}}

@@ -65,7 +65,7 @@
             }
         })
     
-    const rutasRedireccion = ['/PublicarVehiculos.html', '/mantencion.html', '/mantencionesUsuario.html', '/Mis_publicaciones.html'];
+
 
     // Manejar cierre de sesión
     document.querySelectorAll('.logout-button').forEach(function(button) {
@@ -106,7 +106,7 @@
                         throw new Error('Problema al cerrar sesión');
                     })
                     .then(data => {
-                        if (rutasRedireccion.includes(window.location.pathname)) {
+                        if (window.location.pathname) {
                             // Redirige a la página de inicio después de un retraso
                             setTimeout(() => {
                                 window.location.href = 'Home.html';
