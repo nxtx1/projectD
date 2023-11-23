@@ -1,12 +1,16 @@
 
+
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2/promise');
 const multer = require('multer');
+require('dotenv').config();
 // Configura Multer para guardar archivos en la memoria
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage, limits: { fileSize: 10 * 1024 * 1024 }  });
+
+const sendEmail = require('../app/templates/assets/js/./emailService');
 
 // Luego, usarías 'upload' como middleware en tu ruta de POST
 
@@ -44,30 +48,28 @@ function verifyToken(req, res, next) {
 }
 
 router.post('/register', async (req, res) => {
-    const { nombre_usuario, correo, contrasena } = req.body;
-
-    // Validar si el correo ya existe
-    const [users] = await pool.query('SELECT correo FROM usuario WHERE correo = ?', [correo]);
-    if (users.length > 0) {
-        return res.status(409).json({ message: 'Correo electrónico ya registrado' });
-    }
-
-    // Validar la contraseña
-    if (!isValidPassword(contrasena)) {
-        return res.status(400).json({ message: 'La contraseña debe tener al menos 8 caracteres.' });
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(contrasena, salt);
-    const roledefecto = 0
     try {
+        const { nombre_usuario, correo, contrasena } = req.body;
+
+        // Validar si el correo ya existe
+        const [users] = await pool.query('SELECT correo FROM usuario WHERE correo = ?', [correo]);
+        if (users.length > 0) {
+            return res.status(409).json({ message: 'Correo electrónico ya registrado' });
+        }
+
+        // Encriptar la contraseña
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(contrasena, salt);
+
+        // Insertar el nuevo usuario en la base de datos
         await pool.query(
-            'INSERT INTO usuario (nombre_usuario, correo, contrasena, rol) VALUES (?, ?, ?, ?)',
-            [nombre_usuario, correo, hashedPassword, roledefecto]
+            'INSERT INTO usuario (nombre_usuario, correo, contrasena) VALUES (?, ?, ?)',
+            [nombre_usuario, correo, hashedPassword]
         );
-        res.status(201).json({ message: 'User registered' });
+        res.status(201).json({ message: 'Usuario registrado con éxito' });
     } catch (error) {
-        res.status(500).json({ message: 'Registration failed', error });
+        console.error(error);
+        res.status(500).json({ message: 'Error al registrar el usuario', error: error.message });
     }
 });
 
