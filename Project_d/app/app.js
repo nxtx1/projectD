@@ -7,6 +7,7 @@ require('dotenv').config(); // Carga variables de entorno del archivo .env
 const { pool } = require('../routes/auth');
 const mysql = require('mysql2/promise');
 const moment = require('moment');
+const auth = require('../routes/auth');
 
 const app = express();
 
@@ -27,7 +28,7 @@ app.get('/login-register', (req, res) => {
 app.get('/home', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'Home.html'));
 });
-app.get('/publicacionespendientes', verificarRoleAdmin, (req, res) => {
+app.get('/publicacionespendientes', authModule.verifyToken, verificarRolAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, 'templates', 'publicacionespendientes.html'));
 });
 
@@ -78,7 +79,7 @@ app.get('/mantencionesUsuario', authModule.verifyToken, verificarRolesPermitidos
   // Solo los usuarios autenticados pueden acceder aquí
   res.sendFile(path.join(__dirname, 'templates', 'mantencionesUsuario.html'));
 });
-app.get('/cuentas.html', authModule.verifyToken, verificarRoleAdmin, (req, res) => {
+app.get('/cuentas.html', authModule.verifyToken, verificarRolAdmin, (req, res) => {
   // Solo los usuarios autenticados pueden acceder aquí
   res.sendFile(path.join(__dirname, 'templates', 'rolUser.html'));
 });
@@ -348,16 +349,17 @@ app.get('/api/vehiculos', async (req, res) => {
     }
   }
 
-function verificarRoleAdmin(req, res, next) {
-  // Asumiendo que los roles permitidos para realizar la acción son mecánico y administrador
-  const rolesPermitidos = [2]; // Array de IDs de roles permitidos
 
-  if (req.user && rolesPermitidos.includes(req.user.rol)) {
-    next(); // El usuario tiene un rol permitido, puede continuar
-  } else {
-    res.status(403).json({ mensaje: 'No tiene permisos para realizar esta acción' });
+  function verificarRolAdmin(req, res, next) {
+    // Asumiendo que los roles permitidos para realizar la acción son mecánico y administrador
+    const rolesPermitidos = [3,2]; // Array de IDs de roles permitidos
+  
+    if (req.user && rolesPermitidos.includes(req.user.rol)) {
+      next(); // El usuario tiene un rol permitido, puede continuar
+    } else {
+      res.status(403).json({ mensaje: 'No tiene permisos para realizar esta acción' });
+    }
   }
-}
 
 
 app.get('/api/mantenciones', authModule.verifyToken, verificarRolesPermitidos, async (req, res) => {
@@ -402,7 +404,7 @@ app.post('/api/mantenciones/:id/cambiar-estado', authModule.verifyToken, verific
   }
 });
 
-app.get('/api/rol', authModule.verifyToken, verificarRoleAdmin, async (req, res) => {
+app.get('/api/rol', authModule.verifyToken, async (req, res) => {
   try {
     const query = `SELECT * FROM usuario;`
     const [rol] = await pool.query(query);
@@ -654,7 +656,7 @@ app.get('/api/fechas', async (req, res) => {
 
 
 
-app.get('/vehiculos-pendientes', verificarRoleAdmin, async (req, res) => {
+app.get('/vehiculos-pendientes', authModule.verifyToken ,verificarRolAdmin, async (req, res) => {
   try {
       let query = `
       SELECT 
@@ -666,6 +668,7 @@ app.get('/vehiculos-pendientes', verificarRoleAdmin, async (req, res) => {
       v.foto,
       v.estado,
       v.fecha_publicacion,
+      v.numero,
       m.modelo,
       ma.marca
     FROM vehiculo v
@@ -693,7 +696,7 @@ app.get('/vehiculos-pendientes', verificarRoleAdmin, async (req, res) => {
   }
 });
 
-app.post('/aprobar-vehiculo/:id', verificarRoleAdmin, async (req, res) => {
+app.post('/aprobar-vehiculo/:id', authModule.verifyToken , verificarRolAdmin, async (req, res) => {
   const idVehiculo = req.params.id;
 
   try {
@@ -710,7 +713,7 @@ app.post('/aprobar-vehiculo/:id', verificarRoleAdmin, async (req, res) => {
   }
 });
 
-app.post('/rechazar-vehiculo/:id', verificarRoleAdmin, async (req, res) => {
+app.post('/rechazar-vehiculo/:id', authModule.verifyToken, verificarRolAdmin, async (req, res) => {
   const idVehiculo = req.params.id;
 
   try {
