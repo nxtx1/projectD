@@ -93,8 +93,7 @@ async function enviarFormulario(event) {
             // Mostrar mensaje al usuario
             alert('Tu publicación ha sido creada y está pendiente de aprobación.');
 
-            // Opcionalmente, redirigir al usuario o actualizar la página
-            // window.location.href = 'ruta-a-página-de-confirmación';
+        window.location.href = '/home.html';
         } else {
             const errorResult = await response.json();
             console.error('Error al enviar formulario:', errorResult);
@@ -102,7 +101,6 @@ async function enviarFormulario(event) {
         }
     } catch (error) {
         console.error('Error de red o del servidor:', error);
-        alert('Error de conexión. Por favor, verifica tu conexión a internet.');
     }
 }
 
