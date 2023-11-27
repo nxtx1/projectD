@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
+// Este código está en obtenerVehiculos.js
 document.addEventListener('DOMContentLoaded', () => {
   const mantencionForm = document.getElementById('mantencionForm');
   if (mantencionForm) {
@@ -48,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json',
-                      // Asegúrate de agregar aquí el token si es necesario
+                      // Aquí deberías incluir también el token de autorización si es necesario
                   },
                   body: JSON.stringify({
                       fecha_mantencion: fechaMantencion,
@@ -76,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
               }
           } catch (error) {
               // Manejar errores de conexión, etc.
+              console.log(error);
               Swal.fire({
                   icon: 'error',
                   title: 'Error',
@@ -85,4 +87,3 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 });
-

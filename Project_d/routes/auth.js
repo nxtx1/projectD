@@ -1,18 +1,15 @@
-
-
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2/promise');
 const multer = require('multer');
 require('dotenv').config();
+
 // Configura Multer para guardar archivos en la memoria
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage, limits: { fileSize: 10 * 1024 * 1024 }  });
+const upload = multer({ storage: storage, limits: { fileSize: 10 * 1024 * 1024 } });
 
-const sendEmail = require('../app/templates/assets/js/./emailService');
-
-// Luego, usarías 'upload' como middleware en tu ruta de POST
+const { sendPasswordResetEmail, sendWelcomeEmail } = require('../app/emailService');
 
 const router = express.Router();
 
@@ -66,10 +63,37 @@ router.post('/register', async (req, res) => {
             'INSERT INTO usuario (nombre_usuario, correo, contrasena) VALUES (?, ?, ?)',
             [nombre_usuario, correo, hashedPassword]
         );
-        res.status(201).json({ message: 'Usuario registrado con éxito' });
+        await sendWelcomeEmail(correo, 'Bienvenido a Nuestro Sitio', 'Gracias por registrarte con nosotros.');
+        res.status(201).json({ message: 'User registered' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error al registrar el usuario', error: error.message });
+    }
+});
+
+// Ruta para solicitar restablecimiento de contraseña
+router.post('/request-password-reset', async (req, res) => {
+    const { email } = req.body;
+    try {
+        const [users] = await pool.query('SELECT id_usuario FROM usuario WHERE correo = ?', [email]);
+        if (users.length === 0) {
+            return res.status(404).send('Usuario no encontrado');
+        }
+
+        const user = users[0];
+        const resetToken = jwt.sign({ id: user.id_usuario }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        // Guardar el token en la base de datos
+        await pool.query('UPDATE usuario SET resetToken = ?, resetTokenExpires = ? WHERE id_usuario = ?', [resetToken, new Date(Date.now() + 3600000), user.id_usuario]);
+
+        // Enviar correo con el enlace de restablecimiento
+        const resetUrl = `http://localhost:3000/password-reset/${resetToken}`;
+        await sendPasswordResetEmail(email, 'Recuperación de contraseña', `Haz click en el siguiente enlace para restablecer tu contraseña: ${resetUrl}`);
+
+        res.send('Correo de restablecimiento de contraseña enviado.');
+    } catch (error) {
+        console.error('Error al solicitar el restablecimiento de la contraseña:', error);
+        res.status(500).send('Error al procesar la solicitud');
     }
 });
 
@@ -84,7 +108,7 @@ router.post('/login', async (req, res) => {
         const user = results[0];
 
         if (!user) {
-            return res.status(400).json({ message: 'User not found' });
+            return res.status(400).json({ message: 'Usuario no encontrado' });
         }
 
         const isMatch = await bcrypt.compare(contrasena, user.contrasena);
@@ -97,7 +121,7 @@ router.post('/login', async (req, res) => {
             expiresIn: '1h'
         });
         console.log(user.rol);
-        res.cookie('token', token, { httpOnly: true });
+        res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
         res.status(200).json({ message: 'Logged in' });
     } catch (error) {
         res.status(500).json({ message: 'Login failed', error });
@@ -204,7 +228,34 @@ router.get('/comunas/:regionId', async (req, res) => {
         res.status(500).json({ message: 'Error al obtener las comunas', error });
     }
 });
-module.exports = {
+
+// Ruta para solicitar restablecimiento de contraseña
+router.post('/request-password-reset', async (req, res) => {
+    const { email } = req.body;
+    try {
+        const [users] = await pool.query('SELECT id_usuario FROM usuario WHERE correo = ?', [email]);
+        if (users.length === 0) {
+            return res.status(404).send('Usuario no encontrado');
+        }
+
+        const user = users[0];
+        const resetToken = jwt.sign({ id: user.id_usuario }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        // Guardar el token en la base de datos
+        await pool.query('UPDATE usuario SET resetToken = ?, resetTokenExpires = ? WHERE id_usuario = ?', [resetToken, new Date(Date.now() + 3600000), user.id_usuario]);
+
+        // Enviar correo con el enlace de restablecimiento
+        const resetUrl = `http://localhost:3000/password-reset/${resetToken}`;
+        await sendEmail(email, 'Recuperación de contraseña', `Haz click en el siguiente enlace para restablecer tu contraseña: ${resetUrl}`);
+
+        res.send('Correo de restablecimiento de contraseña enviado.');
+    } catch (error) {
+        console.error('Error al solicitar el restablecimiento de la contraseña:', error);
+        res.status(500).send('Error al procesar la solicitud');
+    }
+});
+  
+  module.exports = {
     router: router,
     verifyToken: verifyToken,
     pool

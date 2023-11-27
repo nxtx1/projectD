@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login y Registro</title>
     <link rel="stylesheet" href="/assets/css/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
       </style>
@@ -32,7 +33,10 @@
                     <h2>Iniciar Sesión</h2>
                     <input type="text" placeholder="Correo electrónico" id="correo">
                     <input type="password" placeholder="Contraseña" id="contrasena">
-                    <button type="submit" id="submit_login">Entrar</button>
+                    <div class="contenedor__acciones">
+                        <button type="submit" id="submit_login">Entrar</button>
+                        <a href="#" onclick="showRecoverPassword()" class="forgot-password-link">¿Has olvidado tu contraseña?</a>
+                    </div>
                 </form>
                 <!--Registro-->
                 <form action="" class="formulario__register">
@@ -40,7 +44,9 @@
                     <input type="text" placeholder="Nombre de usuario" id="nombre_usuario">
                     <input type="email" placeholder="Correo electrónico" id="correo_login">
                     <input type="password" placeholder="Contraseña" id=contrasena_login>
+                    <div class="btnregistro">
                     <button type="submit" id="submit_register">Registrarse</button>
+                </div>
                 </form>
             </div>
         </div>

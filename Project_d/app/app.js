@@ -7,9 +7,9 @@ require('dotenv').config(); // Carga variables de entorno del archivo .env
 const { pool } = require('../routes/auth');
 const mysql = require('mysql2/promise');
 const moment = require('moment');
-const auth = require('../routes/auth');
-
+const { sendPasswordResetEmail, sendWelcomeEmail, sendMaintenanceEmail } = require('./emailService');
 const app = express();
+const auth = require('../routes/auth');
 
 // Middlewares
 app.use(express.json());
@@ -21,6 +21,18 @@ app.use(cors());
 //rutas
 
 // Aquí agregas la nueva ruta:
+
+app.post('/recover-password', async (req, res) => {
+  const { email } = req.body;
+  try {
+      await sendPasswordResetEmail(email, 'Recuperación de contraseña', 'Aquí van las instrucciones para recuperar tu contraseña, Haz click en el link para recuperar tu contraseña, http://localhost:3000/home');
+      res.json({ message: 'Correo de recuperación enviado.' });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error al enviar el correo de recuperación.' });
+  }
+});
+
 app.get('/login-register', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'login-register.html'));
 });
@@ -59,6 +71,42 @@ app.get('/detalle-vehiculo-mispublicaciones/:vehiculoId', authModule.verifyToken
   res.sendFile(path.join(__dirname, 'templates', 'detalle-vehiculo-mispublicaciones.html'));
 });
 
+app.post('/request-password-reset', async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(400).send('Usuario no encontrado');
+    }
+
+    // Genera un token de restablecimiento de contraseña con JWT
+    const resetToken = jwt.sign(
+      { id: user._id }, // Usa el ID del usuario para el payload del JWT
+      process.env.JWT_SECRET, // La clave secreta para firmar el token
+      { expiresIn: '1h' } // El token expira en 1 hora
+    );
+
+    // Guarda el token en el registro del usuario en la base de datos
+    user.resetToken = resetToken;
+    user.resetTokenExpires = Date.now() + 3600000; // 1 hora para expirar
+    await user.save();
+
+    // URL de restablecimiento de contraseña que incluye el token
+    const resetUrl = `http://localhost:3000/password-reset/${resetToken}`;
+
+    // Envía el email al usuario con el enlace de restablecimiento
+    await sendPasswordResetEmail(
+      email,
+      'Recuperación de contraseña',
+      `Por favor, haz click en el siguiente enlace para restablecer tu contraseña: ${resetUrl}`
+    );
+
+    res.send('Se ha enviado un correo electrónico con instrucciones para restablecer la contraseña.');
+  } catch (error) {
+    console.error('Error al solicitar el restablecimiento de la contraseña:', error);
+    res.status(500).send('Error al procesar la solicitud');
+  }
+});
 
 // Ejemplo de uso del middleware para una ruta que requiere autenticación
 app.get('/create-post', authModule.verifyToken, (req, res) => {
@@ -285,8 +333,18 @@ app.get('/api/vehiculos', async (req, res) => {
         await pool.query(
             'INSERT INTO mantencion (fecha_mantencion, usuario_id_usuario, vehiculo_id_vehiculo, estado) VALUES (?, ?, ?, ?)',
             [fecha_mantencion, userId, vehiculo_id_vehiculo, estadodefecto]
-        );
-      
+        ); 
+        const [userRows] = await pool.query('SELECT correo FROM usuario WHERE id_usuario = ?', [userId]);
+        if (userRows.length === 0) {
+            return res.status(404).send('Usuario no encontrado');
+        }
+        const userEmail = userRows[0].correo;
+
+        // Envía el correo electrónico
+        await sendMaintenanceEmail(userEmail, { 
+            fecha: fecha_mantencion, 
+            vehiculo: vehiculo_id_vehiculo // Suponiendo que esto es suficiente para tu correo
+        });
         res.status(200).json({ message: 'Mantención agendada correctamente' });
     } catch (error) {
         console.error('Error al crear la mantención:', error);
@@ -331,11 +389,6 @@ app.get('/api/vehiculos', async (req, res) => {
       res.status(500).json({ message: 'Error al eliminar la mantención', error });
     }
   });
-  
-
-
-
-
 
 
   function verificarRolesPermitidos(req, res, next) {
@@ -348,12 +401,11 @@ app.get('/api/vehiculos', async (req, res) => {
       res.status(403).json({ mensaje: 'No tiene permisos para realizar esta acción' });
     }
   }
-
-
+  
   function verificarRolAdmin(req, res, next) {
     // Asumiendo que los roles permitidos para realizar la acción son mecánico y administrador
     const rolesPermitidos = [3,2]; // Array de IDs de roles permitidos
-  
+
     if (req.user && rolesPermitidos.includes(req.user.rol)) {
       next(); // El usuario tiene un rol permitido, puede continuar
     } else {
@@ -414,6 +466,7 @@ app.get('/api/rol', authModule.verifyToken, async (req, res) => {
     res.status(500).send('Error al obtener los roles');
   }
 });
+
 
 app.post('/api/roles/:id/cambiar-estado', authModule.verifyToken, verificarRolesPermitidos, async (req, res) => {
   const idUsuario = req.params.id;
@@ -705,7 +758,6 @@ app.post('/aprobar-vehiculo/:id', authModule.verifyToken , verificarRolAdmin, as
     const query = 'UPDATE vehiculo SET estado = "Aprobado" WHERE id_vehiculo = ?';
     // Suponiendo que 'db' es tu conexión a la base de datos
     await pool.query(query, [idVehiculo]);
-
     res.json({ message: `Vehículo con ID ${idVehiculo} aprobado.` });
   } catch (error) {
     console.error('Error al aprobar el vehículo:', error);
@@ -720,7 +772,6 @@ app.post('/rechazar-vehiculo/:id', authModule.verifyToken, verificarRolAdmin, as
     // Código para eliminar el registro de la base de datos
     const query = 'DELETE FROM vehiculo WHERE id_vehiculo = ?';
     await pool.query(query, [idVehiculo]);
-
     res.json({ message: `Vehículo con ID ${idVehiculo} rechazado y eliminado.` });
   } catch (error) {
     console.error('Error al rechazar el vehículo:', error);

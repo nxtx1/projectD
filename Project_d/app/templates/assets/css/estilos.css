@@ -122,7 +122,6 @@ main{
 
 .contenedor__login-register form button{
     padding: 10px 40px;
-    margin-top: 40px;
     border: none;
     font-size: 14px;
     background: #F77D0A;
@@ -167,4 +166,64 @@ main{
     .contenedor__login-register form {
         position: relative;
     }
+}
+
+.contenedor__acciones {
+    display: flex;
+    justify-content: space-between; /* O 'flex-start' si quieres que estén juntos */
+    align-items: center;
+    margin-top: 40px; /* O el margen que prefieras */
+}
+
+.forgot-password-link {
+    margin-left: 10px; /* O el espacio que prefieras */
+    color: #007bff; /* El color del enlace */
+    font-size: 14px; /* El tamaño del texto */
+    position:absolute;
+    right: 10%;
+}
+
+.forgot-password-link:hover {
+    text-decoration: underline; /* Para un efecto de hover como Google */
+}
+
+.btnregistro{
+    margin-top: 30px;
+}
+
+.modal-container {
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4); /* Color de fondo con opacidad */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    max-width: 300px;
+}
+
+.close-btn {
+    float: right;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.back-arrow {
+    position: absolute;
+    top: 35px;
+    left: 10px;
+    cursor: pointer;
+    font-size: 20px; /* O el tamaño que prefieras */
+    color: #333; /* O el color que prefieras */
 }
