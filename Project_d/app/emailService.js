@@ -1,22 +1,26 @@
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 
 // Configuración del transporte de Nodemailer para usar Outlook
 const transporter = nodemailer.createTransport({
     service: 'outlook',
     auth: {
-        user: 'automarket.serv@outlook.com',
+        user: 'automarket.serv1@outlook.com',
         pass: 'olakarlita1' // Considera usar variables de entorno para proteger tu contraseña
     }
 });
 
 // Función para enviar el email con un enlace para cambiar la contraseña
 async function sendPasswordResetEmail(userEmail, user) {
+    console.log('Objeto user:', user);
+    console.log('User ID para el token:', user.id_usuario);
     // Suponiendo que user es un objeto que contiene información del usuario y su token de reset
-    const resetToken = user.resetToken;
-    const resetUrl = `http://localhost:3000/?password-resettoken=${resetToken}`;
+    const resetToken = jwt.sign({ id: user.id_usuario }, process.env.SECRET_KEY, { expiresIn: '1h' });
+    console.log('Token generado:', resetToken);
+    const resetUrl = `http://localhost:3000/password-reset.html?token=${user.resetToken}`;
 
     const mailOptions = {
-        from: process.env.EMAIL_FROM || 'automarket.serv@outlook.com',
+        from: process.env.EMAIL_FROM || 'automarket.serv1@outlook.com',
         to: userEmail,
         subject: 'Recuperación de contraseña',
         html: `
@@ -27,6 +31,8 @@ async function sendPasswordResetEmail(userEmail, user) {
     };
 
     try {
+        const decoded = jwt.verify(resetToken, process.env.SECRET_KEY);
+        console.log('Token decodificado:', decoded);
         await transporter.sendMail(mailOptions);
         console.log(`Correo de recuperación de contraseña enviado a ${userEmail}`);
     } catch (error) {
@@ -36,7 +42,7 @@ async function sendPasswordResetEmail(userEmail, user) {
 
 async function sendWelcomeEmail(userEmail, user) {
     const mailOptions = {
-        from: process.env.EMAIL_FROM || 'automarket.serv@outlook.com',
+        from: process.env.EMAIL_FROM || 'automarket.serv1@outlook.com',
         to: userEmail,
         subject: 'Bienvenido a AutoMarket!',
         html: `

@@ -149,7 +149,6 @@ function showLogin() {
     `;
 }
 
-
 function sendRecoveryEmail() {
     var email = document.getElementById('email-recovery').value;
     // Envía una petición al servidor para iniciar el proceso de recuperación de contraseña

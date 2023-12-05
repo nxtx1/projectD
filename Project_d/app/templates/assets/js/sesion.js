@@ -28,7 +28,6 @@ window.onload = function() {
                 break;
         }
             loginRegisterLink.style.display = 'none';
-            welcomeMessage.style.display = 'block'; // Muestra el mensaje de bienvenida
             var usernameDisplay = document.getElementById('usernameDisplay');
             if (usernameDisplay) {
                 usernameDisplay.textContent = data.username;

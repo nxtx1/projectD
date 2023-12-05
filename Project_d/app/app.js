@@ -10,6 +10,8 @@ const moment = require('moment');
 const { sendPasswordResetEmail, sendWelcomeEmail, sendMaintenanceEmail } = require('./emailService');
 const app = express();
 const auth = require('../routes/auth');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 // Middlewares
 app.use(express.json());
@@ -25,13 +27,66 @@ app.use(cors());
 app.post('/recover-password', async (req, res) => {
   const { email } = req.body;
   try {
-      await sendPasswordResetEmail(email, 'Recuperación de contraseña', 'Aquí van las instrucciones para recuperar tu contraseña, Haz click en el link para recuperar tu contraseña, http://localhost:3000/home');
+      const [users] = await pool.query('SELECT id_usuario FROM usuario WHERE correo = ?', [email]);
+      if (users.length === 0) {
+          return res.status(404).json({ message: 'Correo electrónico no registrado.' });
+      }
+
+      const user = users[0];
+      const resetToken = jwt.sign({ id: user.id_usuario }, process.env.SECRET_KEY, { expiresIn: '1h' });
+
+      await sendPasswordResetEmail(email, { id_usuario: user.id_usuario, resetToken: resetToken });
       res.json({ message: 'Correo de recuperación enviado.' });
   } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Error al enviar el correo de recuperación.' });
   }
 });
+
+
+app.post('/reset-password', async (req, res) => {
+  const { token, newPassword } = req.body;
+  console.log('Received token:', token);
+
+  if (!token || !newPassword) {
+    return res.status(400).json({ message: 'Token y nueva contraseña son requeridos.' });
+  }
+
+  try {
+    // Verifica el token y extrae el ID de usuario
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    console.log('UserID from token:', decoded.id); // Imprime el ID de usuario para depuración
+
+    // Verifica si el usuario existe en la base de datos
+    const [userResult] = await pool.query('SELECT * FROM usuario WHERE id_usuario = ?', [decoded.id]);
+    if (userResult.length === 0) {
+      return res.status(404).json({ message: 'Usuario no encontrado.' });
+    }
+
+    // Aquí debes incluir lógica para validar la contraseña (por ejemplo, longitud mínima, etc.)
+
+    // Proceder con el cambio de contraseña
+    const userId = decoded.id;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    
+    // Actualiza la contraseña del usuario en la base de datos
+    await pool.query('UPDATE usuario SET contrasena = ? WHERE id_usuario = ?', [hashedPassword, userId]);
+
+    res.json({ message: 'Contraseña actualizada con éxito.' });
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      res.status(401).json({ message: 'El token ha expirado.' });
+    } else if (error.name === 'JsonWebTokenError') {
+      res.status(400).json({ message: 'Token inválido.' });
+    } else {
+      console.error(error);
+      res.status(500).json({ message: 'Error al restablecer la contraseña.' });
+    }
+  }
+});
+
+
 
 app.get('/login-register', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'login-register.html'));
@@ -71,42 +126,7 @@ app.get('/detalle-vehiculo-mispublicaciones/:vehiculoId', authModule.verifyToken
   res.sendFile(path.join(__dirname, 'templates', 'detalle-vehiculo-mispublicaciones.html'));
 });
 
-app.post('/request-password-reset', async (req, res) => {
-  const { email } = req.body;
-  try {
-    const user = await User.findOne({ email: email });
-    if (!user) {
-      return res.status(400).send('Usuario no encontrado');
-    }
 
-    // Genera un token de restablecimiento de contraseña con JWT
-    const resetToken = jwt.sign(
-      { id: user._id }, // Usa el ID del usuario para el payload del JWT
-      process.env.JWT_SECRET, // La clave secreta para firmar el token
-      { expiresIn: '1h' } // El token expira en 1 hora
-    );
-
-    // Guarda el token en el registro del usuario en la base de datos
-    user.resetToken = resetToken;
-    user.resetTokenExpires = Date.now() + 3600000; // 1 hora para expirar
-    await user.save();
-
-    // URL de restablecimiento de contraseña que incluye el token
-    const resetUrl = `http://localhost:3000/password-reset/${resetToken}`;
-
-    // Envía el email al usuario con el enlace de restablecimiento
-    await sendPasswordResetEmail(
-      email,
-      'Recuperación de contraseña',
-      `Por favor, haz click en el siguiente enlace para restablecer tu contraseña: ${resetUrl}`
-    );
-
-    res.send('Se ha enviado un correo electrónico con instrucciones para restablecer la contraseña.');
-  } catch (error) {
-    console.error('Error al solicitar el restablecimiento de la contraseña:', error);
-    res.status(500).send('Error al procesar la solicitud');
-  }
-});
 
 // Ejemplo de uso del middleware para una ruta que requiere autenticación
 app.get('/create-post', authModule.verifyToken, (req, res) => {

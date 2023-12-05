@@ -72,30 +72,6 @@ router.post('/register', async (req, res) => {
 });
 
 // Ruta para solicitar restablecimiento de contraseña
-router.post('/request-password-reset', async (req, res) => {
-    const { email } = req.body;
-    try {
-        const [users] = await pool.query('SELECT id_usuario FROM usuario WHERE correo = ?', [email]);
-        if (users.length === 0) {
-            return res.status(404).send('Usuario no encontrado');
-        }
-
-        const user = users[0];
-        const resetToken = jwt.sign({ id: user.id_usuario }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-        // Guardar el token en la base de datos
-        await pool.query('UPDATE usuario SET resetToken = ?, resetTokenExpires = ? WHERE id_usuario = ?', [resetToken, new Date(Date.now() + 3600000), user.id_usuario]);
-
-        // Enviar correo con el enlace de restablecimiento
-        const resetUrl = `http://localhost:3000/password-reset/${resetToken}`;
-        await sendPasswordResetEmail(email, 'Recuperación de contraseña', `Haz click en el siguiente enlace para restablecer tu contraseña: ${resetUrl}`);
-
-        res.send('Correo de restablecimiento de contraseña enviado.');
-    } catch (error) {
-        console.error('Error al solicitar el restablecimiento de la contraseña:', error);
-        res.status(500).send('Error al procesar la solicitud');
-    }
-});
 
 router.post('/login', async (req, res) => {
     const { correo, contrasena } = req.body;
@@ -226,32 +202,6 @@ router.get('/comunas/:regionId', async (req, res) => {
         res.json(comunas);
     } catch (error) {
         res.status(500).json({ message: 'Error al obtener las comunas', error });
-    }
-});
-
-// Ruta para solicitar restablecimiento de contraseña
-router.post('/request-password-reset', async (req, res) => {
-    const { email } = req.body;
-    try {
-        const [users] = await pool.query('SELECT id_usuario FROM usuario WHERE correo = ?', [email]);
-        if (users.length === 0) {
-            return res.status(404).send('Usuario no encontrado');
-        }
-
-        const user = users[0];
-        const resetToken = jwt.sign({ id: user.id_usuario }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-        // Guardar el token en la base de datos
-        await pool.query('UPDATE usuario SET resetToken = ?, resetTokenExpires = ? WHERE id_usuario = ?', [resetToken, new Date(Date.now() + 3600000), user.id_usuario]);
-
-        // Enviar correo con el enlace de restablecimiento
-        const resetUrl = `http://localhost:3000/password-reset/${resetToken}`;
-        await sendEmail(email, 'Recuperación de contraseña', `Haz click en el siguiente enlace para restablecer tu contraseña: ${resetUrl}`);
-
-        res.send('Correo de restablecimiento de contraseña enviado.');
-    } catch (error) {
-        console.error('Error al solicitar el restablecimiento de la contraseña:', error);
-        res.status(500).send('Error al procesar la solicitud');
     }
 });
   
