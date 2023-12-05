@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('kilometraje-vehiculo').textContent = `${vehiculo.kilometraje}`;
       document.getElementById('gasolina-vehiculo').textContent = vehiculo.transmision === 1 ? 'Diesel' : 'Gasolina';
       document.getElementById('precio-vehiculo').textContent = `$${vehiculo.precio}`;
+      document.getElementById('numero').textContent = `${vehiculo.numero}`;
       document.getElementById('descripcion-vehiculo').textContent = `${vehiculo.descripcion}`;
   })
   .catch(error => {

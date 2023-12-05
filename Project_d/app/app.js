@@ -192,6 +192,7 @@ app.get('/api/vehiculos/:id', async (req, res) => {
         v.transmision,
         v.descripcion,
         v.combustible,
+        v.numero,
         mo.modelo,
         m.marca
       FROM vehiculo v

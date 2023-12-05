@@ -49,6 +49,11 @@ document.addEventListener('DOMContentLoaded', function() {
       var marcaSelect = document.getElementById('marca-id');
       var modeloSelect = document.getElementById('modelo-id');
       var imagenInput = document.getElementById('vehicle-image');
+      var numeroInput = document.getElementById('numero');
+
+      numeroInput.addEventListener('input', function() {
+        document.getElementById('preview-numero').textContent = numeroInput.value;
+    });
   
       descripcionInput.addEventListener('input', function() {
           document.getElementById('preview-description').textContent = descripcionInput.value;
@@ -125,6 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('preview-year').textContent = '';
                 document.getElementById('preview-title').textContent = '';
                 document.getElementById('preview-model').textContent = '';
+                document.getElementById('preview-numero').textContent = '';
                 combustibleSelect.selectedIndex = 0;
                 transmisionSelect.selectedIndex = 0;
                 marcaSelect.selectedIndex = 0;
@@ -137,26 +143,39 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       });
 
-      function handleImageUpload(event) {
-        var files = event.target.files;
-        var previewContainer = document.getElementById('images-preview-container');
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-            var reader = new FileReader();
-    
-            reader.onload = (function(f, reader) {
-                return function(e) {
-                    var previewElement = document.createElement('div');
-                    previewElement.classList.add('image-preview-item');
-                    
-                    var img = document.createElement('img');
-                    img.src = e.target.result;
-    
-                    previewElement.appendChild(img);
-                    previewContainer.appendChild(previewElement);
-                };
-            })(file, reader);
-    
-            reader.readAsDataURL(file);
-        }
+function handleImageUpload(event) {
+    var files = event.target.files;
+
+    if (files.length > 0) {
+        var file = files[0]; // Solo toma el primer archivo
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            var previewContainer = document.getElementById('images-preview-container');
+            previewContainer.innerHTML = ''; // Limpia el contenedor de la vista previa
+
+            var previewElement = document.createElement('div');
+            previewElement.classList.add('image-preview-item');
+
+            // Crea el botón de cierre
+            var closeButton = document.createElement('button');
+            closeButton.classList.add('close-button');
+            closeButton.innerHTML = '&times;'; // Símbolo de cierre
+            closeButton.onclick = function() {
+            document.getElementById('preview-image').src = '';
+                // Elimina la vista previa de la imagen
+                previewContainer.removeChild(previewElement);
+            };
+
+            var img = document.createElement('img');
+            img.src = e.target.result;
+
+            previewElement.appendChild(closeButton);
+            previewElement.appendChild(img);
+            previewContainer.appendChild(previewElement);
+        };
+
+        reader.readAsDataURL(file);
     }
+}
+

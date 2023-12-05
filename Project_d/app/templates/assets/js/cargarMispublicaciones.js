@@ -23,7 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('kilometraje-vehiculo').textContent = `${vehiculo.kilometraje}`;
     document.getElementById('combustible-vehiculo').textContent = vehiculo.transmision === 1 ? 'Diesel' : 'Gasolina'; // Cambié 'gasolina-vehiculo' por 'combustible-vehiculo'
     document.getElementById('precio-vehiculo').textContent = `$${vehiculo.precio}`;
+    document.getElementById('numero').textContent = `${vehiculo.numero}`;
     document.getElementById('descripcion-vehiculo').textContent = `${vehiculo.descripcion}`;
+
   })
   .catch(error => {
     console.error('Error al cargar los detalles del vehículo:', error);

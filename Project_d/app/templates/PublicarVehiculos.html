@@ -96,8 +96,9 @@
 
         <div class="input-group">
             <label for="ano">Año:</label>
-            <input type="number" id="ano" name="ano" required>
+            <input type="text" id="ano" name="ano" required maxlength="4" pattern="\d{4}">
         </div>
+        
 
         <div class="input-group">
             <label for="transmision">Transmisión:</label>
@@ -155,7 +156,7 @@
             <div class="upload-photo-container" onclick="document.getElementById('vehicle-image').click();">
                 <div class="upload-photo-button">
                     <i class="fas fa-plus"></i>
-                    <span>Agregar imágenes</span>
+                    <span>Agregar imágen</span>
                 </div>
                 <input type="file" id="vehicle-image" name="vehicleImage" accept="image/*" class="upload-input" multiple style="display: none;" onchange="handleImageUpload(event)">
             </div>
@@ -185,6 +186,7 @@
             <p><strong>Kilometraje:</strong> <span id="preview-mileage"></span></p>
             <p><strong>Combustible:</strong> <span id="preview-fuel"></span></p>
             <p><strong>Precio:</strong> <span id="preview-price"></span></p>
+            <p><strong>Número:</strong> <span id="preview-numero"></span></p>
             <h1>Descripción</h1>
             <p><span id="preview-description"></span></p>
         </div>

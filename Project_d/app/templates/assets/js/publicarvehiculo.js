@@ -10,6 +10,14 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('marca-id').innerHTML = options;
     }
 
+    document.getElementById('ano').addEventListener('input', function (e) {
+        var value = e.target.value;
+        if (value.length > 4) {
+            e.target.value = value.slice(0, 4);
+        }
+    });
+    
+
     async function cargarModelos(marcaId) {
         const response = await fetch(`/modelos/${marcaId}`);
         const modelos = await response.json();
