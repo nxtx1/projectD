@@ -300,6 +300,36 @@ button[type="submit"]:hover {
     background-color: rgba(0, 0, 0, 0.8);
 }
 
+.image-navigation {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.5); 
+    padding: 10px;
+    border-radius: 50%;
+    user-select: none;
+}
+
+.left-arrow {
+    left: 10px;
+}
+
+.right-arrow {
+    right: 10px;
+}
+
+.left-arrow, .right-arrow {
+    display: none;
+}
+
+.image-navigation:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
 .image-container {
     position: relative;
     width: 100%;

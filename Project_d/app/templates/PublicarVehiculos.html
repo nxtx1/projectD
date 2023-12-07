@@ -26,7 +26,7 @@
     <!-- Template Stylesheet -->
     <link href="/assets/css/style.css" rel="stylesheet">
     <link href="assets/css/formulariopubliarautos.css" rel="stylesheet">
-    <link href="assets/css/cssautospublicos.css" rel="stylesheet">
+    <link href="assets/css/formulario.css" rel="stylesheet">
 </head>
 
 <body>
@@ -156,8 +156,9 @@
             <div class="upload-photo-container" onclick="document.getElementById('vehicle-image').click();">
                 <div class="upload-photo-button">
                     <i class="fas fa-plus"></i>
-                    <span>Agregar imágen</span>
+                    <span>Agregar imágenes</span>
                 </div>
+                <span class="max-images-text">Máximo 4 imágenes.</span>
                 <input type="file" id="vehicle-image" name="vehicleImage" accept="image/*" class="upload-input" multiple style="display: none;" onchange="handleImageUpload(event)">
             </div>
             <div id="images-preview-container"></div>
@@ -175,6 +176,8 @@
     <div class="flex-container">
         <!-- Image Container -->
         <div class="image-container">
+            <div class="image-navigation left-arrow" onclick="navigate('prev')">&#10094;</div>
+            <div class="image-navigation right-arrow" onclick="navigate('next')">&#10095;</div>
             <img id="preview-image" src="" />
         </div>
         <!-- Details Container -->

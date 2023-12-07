@@ -83,9 +83,9 @@ async function enviarFormulario(event) {
     formData.append('comuna_id_comuna', document.getElementById('comuna-id').value);
     
     // Agrega la imagen
-    const imageInput = document.getElementById('vehicle-image');
-    if (imageInput.files[0]) {
-        formData.append('vehicleImage', imageInput.files[0]);
+    const imageInputs = document.getElementById('vehicle-image').files;
+    for (let i = 0; i < imageInputs.length; i++) {
+        formData.append('vehicleImages', imageInputs[i]);
     }
 
     try {

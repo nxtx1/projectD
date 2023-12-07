@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
     <html lang="es">
     
     <head>
@@ -46,22 +46,22 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
                     <div class="navbar-nav ml-auto py-0">
-                        <a href="Home.html" class="nav-item nav-link active">Inicio</a>
-                        <a href="#nuestros-servicios" class="nav-item nav-link">Servicio</a>
-                        <a href="autos.html" class="nav-item nav-link">Autos</a>
-                        <a href="nosotros.html" class="nav-item nav-link">Sobre nosotros</a>
+                        <a href="http://localhost:3000/home.html" class="nav-item nav-link active">Inicio</a>
+                        <a href="http://localhost:3000/home.html#nuestros-servicios" class="nav-item nav-link">Servicio</a>
+                        <a href="http://localhost:3000/autos.html" class="nav-item nav-link">Autos</a>
+                        <a href="http://localhost:3000/nosotros.html" class="nav-item nav-link">Sobre nosotros</a>
                         <!-- Elementos para usuario no logueado -->
-                        <a href="Login-register.html" class="nav-item nav-link" id="loginRegisterLink">Inicia Sesión/Registrate</a>
+                        <a href="http://localhost:3000/Login-register.html" class="nav-item nav-link" id="loginRegisterLink">Inicia Sesión/Registrate</a>
                         <!-- Elementos para usuario logueado -->
                         <div class="nav-item dropdown" id="userAccountMenu" style="display: none;">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Mi cuenta
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="customDropdownMenu">
-                                <a class="dropdown-item" href="PublicarVehiculos.html">Publica tu auto</a>
-                                <a class="dropdown-item" href="mantencion.html">Mantención</a>
-                                <a class="dropdown-item" href="mantencionesUsuario.html">Mis mantenciones</a>
-                                <a class="dropdown-item" href="Mis_publicaciones.html">Mis publicaciones</a>
+                                <a class="dropdown-item" href="http://localhost:3000/PublicarVehiculos.html">Publica tu auto</a>
+                                <a class="dropdown-item" href="http://localhost:3000/mantencion.html">Mantención</a>
+                                <a class="dropdown-item" href="http://localhost:3000/mantencionesUsuario.html">Mis mantenciones</a>
+                                <a class="dropdown-item" href="http://localhost:3000/Mis_publicaciones.html">Mis publicaciones</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item logout-button" href="#" id="logoutButton">Cerrar sesión</a>
                             </div>
@@ -72,7 +72,7 @@
                                 Menú Mecánico
                             </a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="mantenciones.html">Mantenciones</a>
+                                <a class="dropdown-item" href="http://localhost:3000/mantenciones.html">Mantenciones</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item logout-button" href="#" id="logoutButtonMechanic">Cerrar sesión</a>
                             </div>
@@ -84,9 +84,9 @@
                                 Menú Administrador
                             </a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="publicacionespendientes.html">Publicaciones pendientes</a>
-                                <a class="dropdown-item" href="cuentas.html">Cambiar Rol</a>
-                                <a class="dropdown-item" href="mantenciones.html">Mantenciones</a>
+                                <a class="dropdown-item" href="http://localhost:3000/publicacionespendientes.html">Publicaciones pendientes</a>
+                                <a class="dropdown-item" href="http://localhost:3000/cuentas.html">Cambiar Rol</a>
+                                <a class="dropdown-item" href="http://localhost:3000/mantenciones.html">Mantenciones</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item logout-button" href="#" id="logoutButtonAdmin">Cerrar sesión</a>
                             </div>
@@ -106,8 +106,35 @@
         <!-- Image Container -->
         <div class="image-container">
             <img id="imagen-vehiculo" src="" alt="Imagen del Vehículo" />
+            <button class="left-arrow">‹</button>
+            <button class="right-arrow">›</button>
         </div>
         
+        <style>
+            .image-container {
+              position: relative;
+            }
+            .left-arrow, .right-arrow {
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+              background-color: rgba(0, 0, 0, 0.5);
+              color: white;
+              border: none;
+              padding: 10px;
+              cursor: pointer;
+            }
+            .left-arrow {
+              left: 10px;
+            }
+            .right-arrow {
+              right: 10px;
+            }
+            .image-container img {
+              width: 100%;
+              display: none; /* Ocultar imágenes por defecto */
+            }
+          </style>
         <!-- Details Container -->
         <div class="details-container">
             <h1>Características</h1>
@@ -149,7 +176,7 @@
    <script src="assets/lib/tempusdominus/js/moment-timezone.min.js"></script>
    <script src="assets/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-   <script src="/assets/js/numberFormatter.js"></script>
+   <script src="/assets/js/numberFormatter.js"></script> 
    <script src="/assets/js/usuario.js"></script>
    <!-- Template Javascript -->
    <script src="/assets/js/sesion.js"></script>
