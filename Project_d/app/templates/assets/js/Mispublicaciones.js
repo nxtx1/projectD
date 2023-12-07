@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const vehiculoHTML = `
             <div class="col-lg-4 col-md-6 mb-2">
               <div class="rent-item mb-4">
-                <img class="img-fluid mb-4" src="${vehiculo.imagen ? 'data:image/jpeg;base64,' + vehiculo.imagen : 'ruta_a_imagen_por_defecto.jpg'}" alt="Foto del vehículo">
+                <img class="img-fluid mb-4" src="data:image/jpeg;base64,${vehiculo.foto}" alt="Foto del vehículo">
                 
                 <h4 class="text-uppercase mb-4">${vehiculo.marca} ${vehiculo.modelo}</h4>
                 <div class="d-flex justify-content-center mb-4">

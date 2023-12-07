@@ -179,91 +179,78 @@ app.get('/obtener-vehiculos', authModule.verifyToken, async (req, res) => {
         res.status(500).send('Error al obtener los vehículos');
     }
 });
-
 app.get('/api/vehiculos/:id', async (req, res) => {
-  try {
+    try {
       const vehiculoId = req.params.id;
-
-      // Primero, obtener los detalles del vehículo
-      const [vehiculoDetalles] = await pool.query(`
-          SELECT 
-              v.id_vehiculo,
-              v.ano,
-              v.kilometraje,
-              v.precio,
-              v.transmision,
-              v.descripcion,
-              v.combustible,
-              v.numero,
-              mo.modelo,
-              ma.marca
-          FROM vehiculo v
-          JOIN modelo mo ON v.modelo_id_modelo = mo.id_modelo
-          JOIN marca ma ON mo.marca_id_marca = ma.id_marca
-          WHERE v.id_vehiculo = ?`, [vehiculoId]);
-
-      if (vehiculoDetalles.length === 0) {
-          return res.status(404).send('Vehículo no encontrado');
+      const [vehiculos] = await pool.query(`
+      SELECT 
+        v.id_vehiculo,
+        v.foto,
+        v.ano,
+        v.kilometraje,
+        v.precio,
+        v.transmision,
+        v.descripcion,
+        v.combustible,
+        v.numero,
+        mo.modelo,
+        m.marca
+      FROM vehiculo v
+      JOIN modelo mo ON v.modelo_id_modelo= mo.id_modelo
+      JOIN marca m ON mo.marca_id_marca = m.id_marca
+      WHERE v.id_vehiculo = ?`, [vehiculoId]);
+  
+      if (vehiculos.length === 0) {
+        return res.status(404).send('Vehículo no encontrado');
       }
-
-      // Luego, obtener las imágenes asociadas al vehículo
-      const [imagenes] = await pool.query(`
-          SELECT img.imagen 
-          FROM imagenes_vehiculo img 
-          WHERE img.id_vehiculo = ?`, [vehiculoId]);
-
-      // Convertir cada imagen BLOB a base64
-      const imagenesBase64 = imagenes.map(img => `data:image/jpeg;base64,${Buffer.from(img.imagen).toString('base64')}`);
-
-      // Combina los detalles del vehículo con las imágenes
-      const vehiculo = {
-          ...vehiculoDetalles[0],
-          imagenes: imagenesBase64
-      };
+  
+      // Suponiendo que 'foto' es un campo BLOB en la base de datos
+      const vehiculo = vehiculos[0];
+      if (vehiculo.foto) {
+        // Convertir el BLOB a una cadena base64
+        vehiculo.foto = Buffer.from(vehiculo.foto).toString('base64');
+        vehiculo.foto = `data:image/jpeg;base64,${vehiculo.foto}`; // Añadir el prefijo necesario para el Data-URI
+      }
+  
       res.json(vehiculo);
-  } catch (error) {
-      console.error('Error al obtener los detalles del vehículo:', error);
+    } catch (error) {
+      console.error(error);
       res.status(500).json({ error: 'Error en el servidor' });
-  }
-});
-
-
-
+    }
+  });
   
   app.get('/mis-publicaciones', authModule.verifyToken, async (req, res) => {
     const userId = req.user.id; // ID del usuario obtenido del token JWT
 
     try {
-        // Selecciona la información del vehículo y la primera imagen de cada uno
         const [publicaciones] = await pool.query(
-            `SELECT 
-                v.*, 
-                ma.marca AS marca, 
-                mo.modelo AS modelo,
-                (SELECT imagen FROM imagenes_vehiculo WHERE id_vehiculo = v.id_vehiculo LIMIT 1) AS imagen
-            FROM 
-                vehiculo v
-                JOIN modelo mo ON v.modelo_id_modelo = mo.id_modelo
-                JOIN marca ma ON mo.marca_id_marca = ma.id_marca
-            WHERE 
-                v.usuario_id_usuario = ?`, [userId]
+          `SELECT 
+            vehiculo.*, 
+            marca.marca AS marca, 
+            modelo.modelo AS modelo
+        FROM 
+            vehiculo
+            JOIN modelo ON vehiculo.modelo_id_modelo = modelo.id_modelo
+            JOIN marca ON modelo.marca_id_marca = marca.id_marca
+        WHERE 
+
+            vehiculo.usuario_id_usuario = ?`, [userId]
         );
 
-        // Convierte la imagen BLOB a base64 para la primera imagen de cada vehículo
-        const publicacionesConImagen = publicaciones.map(pub => {
+        // Opcional: Convertir BLOB a base64 si estás guardando imágenes en BLOB
+        const publicacionesConFoto = publicaciones.map(pub => {
             return {
                 ...pub,
-                imagen: pub.imagen ? Buffer.from(pub.imagen).toString('base64') : null
+                foto: pub.foto ? Buffer.from(pub.foto).toString('base64') : null
             };
         });
 
-        res.json(publicacionesConImagen);
+        res.json(publicacionesConFoto);
     } catch (error) {
-        console.error('Error al obtener las publicaciones del usuario:', error);
+        console.error(error);
         res.status(500).send('Error al obtener las publicaciones del usuario');
     }
 });
-
 
 app.get('/detalle-vehiculo-mispublicaciones/:vehiculoId', authModule.verifyToken, async (req, res) => {
   const { vehiculoId } = req.params;
@@ -325,37 +312,36 @@ app.get('/vehiculo/:id', (req, res) => {
   
 // Ruta para obtener la información de los vehículos
 app.get('/api/vehiculos', async (req, res) => {
-  try {
+    try {
       const query = `
       SELECT 
-          v.id_vehiculo,
-          v.ano,
-          v.kilometraje,
-          v.precio,
-          v.transmision,
-          m.modelo,
-          ma.marca,
-          (SELECT imagen FROM imagenes_vehiculo WHERE id_vehiculo = v.id_vehiculo LIMIT 1) AS imagen
-      FROM vehiculo v
-      JOIN modelo m ON v.modelo_id_modelo = m.id_modelo
-      JOIN marca ma ON m.marca_id_marca = ma.id_marca`;
+      v.id_vehiculo,
+      v.ano,
+      v.kilometraje,
+      v.precio,
+      v.transmision,
+      v.foto,
+      m.modelo,
+      ma.marca
+    FROM vehiculo v
+    JOIN modelo m ON v.modelo_id_modelo = m.id_modelo
+    JOIN marca ma ON m.marca_id_marca = ma.id_marca`;
   
       const [vehiculos] = await pool.query(query);
-      // Convertir la primera imagen BLOB a una cadena base64 para cada vehículo
-      const vehiculosConImagenBase64 = vehiculos.map(vehiculo => {
-          return {
-              ...vehiculo,
-              imagen: vehiculo.imagen ? Buffer.from(vehiculo.imagen).toString('base64') : null
-          };
+      // Convertir la foto BLOB a una cadena base64 para cada vehículo
+      const vehiculosConFotoBase64 = vehiculos.map(vehiculo => {
+        return {
+          ...vehiculo,
+          foto: vehiculo.foto ? Buffer.from(vehiculo.foto).toString('base64') : null
+        };
       });
       
-      res.json(vehiculosConImagenBase64);
-  } catch (error) {
-      console.error('Error al obtener los vehículos de la base de datos:', error);
+      res.json(vehiculosConFotoBase64);
+    } catch (error) {
+      console.error(error);
       res.status(500).send('Error al obtener los vehículos de la base de datos');
-  }
-});
-
+    }
+  });
 
 
   app.post('/crear-mantencion', authModule.verifyToken, async (req, res) => {
@@ -588,26 +574,26 @@ app.get('/api/anos/:modeloId', async (req, res) => {
 
 
 app.get('/api/buscarVehiculos', async (req, res) => {
-  const { marca, modelo, anoInicio, anoFin, precioMin, precioMax, transmision, combustible, kilometrajeMin, kilometrajeMax } = req.query;
+  const { marca, modelo, anoInicio, anoFin, precioMin, precioMax, transmision, combustible, kilometrajeMin, kilometrajeMax} = req.query;
 
   try {
       let query = `
       SELECT 
-        v.id_vehiculo,
-        v.ano,
-        v.kilometraje,
-        v.precio,
-        v.transmision,
-        v.combustible,
-        m.modelo,
-        ma.marca,
-        man.estado,
-        (SELECT imagen FROM imagenes_vehiculo WHERE id_vehiculo = v.id_vehiculo LIMIT 1) AS imagen
-      FROM vehiculo v
-      JOIN modelo m ON v.modelo_id_modelo = m.id_modelo
-      JOIN marca ma ON m.marca_id_marca = ma.id_marca
-      LEFT JOIN mantencion man ON v.id_vehiculo = man.vehiculo_id_vehiculo
-      WHERE v.estado = 'Aprobado'`;
+      v.id_vehiculo,
+      v.ano,
+      v.kilometraje,
+      v.precio,
+      v.transmision,
+      v.foto,
+      v.combustible,
+      m.modelo,
+      ma.marca,
+      man.estado
+    FROM vehiculo v
+    JOIN modelo m ON v.modelo_id_modelo = m.id_modelo
+    JOIN marca ma ON m.marca_id_marca = ma.id_marca
+    LEFT JOIN mantencion man ON v.id_vehiculo = man.vehiculo_id_vehiculo
+          WHERE 1=1 AND v.estado = 'Aprobado'`;
 
           const params = [];
 
@@ -653,22 +639,23 @@ app.get('/api/buscarVehiculos', async (req, res) => {
             params.push(kilometrajeMax);
           }
       
-          const [vehiculos] = await pool.query(query);
-    
-    // Convertir la imagen BLOB a una cadena base64
-    const vehiculosConImagen = vehiculos.map(vehiculo => {
-        return {
-            ...vehiculo,
-            imagen: vehiculo.imagen ? Buffer.from(vehiculo.imagen).toString('base64') : null
-        };
+          const [vehiculos] = await pool.query(query, params);
+          console.log(params);
+      
+          // Convertir la foto BLOB a una cadena base64 para cada vehículo
+          const vehiculosConFotoBase64 = vehiculos.map(vehiculo => {
+            return {
+              ...vehiculo,
+              foto: vehiculo.foto ? Buffer.from(vehiculo.foto).toString('base64') : null
+            };
+          });
+          
+          res.json(vehiculosConFotoBase64);
+      } catch (error) {
+          console.error('Error al buscar vehículos:', error);
+          res.status(500).send('Error en el servidor');
+      }
     });
-    
-    res.json(vehiculosConImagen);
-  } catch (error) {
-      console.error('Error al buscar vehículos:', error);
-      res.status(500).send('Error en el servidor');
-  }
-});
 
 async function generarFechasConHoras() {
   let fechas = [];
@@ -745,44 +732,43 @@ app.get('/api/fechas', async (req, res) => {
 
 app.get('/vehiculos-pendientes', authModule.verifyToken ,verificarRolAdmin, async (req, res) => {
   try {
-    let query = `
-    SELECT 
-        v.id_vehiculo,
-        v.ano,
-        v.kilometraje,
-        v.precio,
-        v.transmision,
-        v.estado,
-        v.fecha_publicacion,
-        v.numero,
-        m.modelo,
-        ma.marca,
-        (SELECT imagen FROM imagenes_vehiculo WHERE id_vehiculo = v.id_vehiculo LIMIT 1) AS imagen
+      let query = `
+      SELECT 
+      v.id_vehiculo,
+      v.ano,
+      v.kilometraje,
+      v.precio,
+      v.transmision,
+      v.foto,
+      v.estado,
+      v.fecha_publicacion,
+      v.numero,
+      m.modelo,
+      ma.marca
     FROM vehiculo v
     JOIN modelo m ON v.modelo_id_modelo = m.id_modelo
     JOIN marca ma ON m.marca_id_marca = ma.id_marca
-    WHERE v.estado = 'pendiente'
-    GROUP BY v.id_vehiculo;
-    `;
-    
-    const [vehiculos] = await pool.query(query);
-    
-    // Convertir la imagen BLOB a una cadena base64
-    const vehiculosConImagen = vehiculos.map(vehiculo => {
+    LEFT JOIN mantencion man ON v.id_vehiculo = man.vehiculo_id_vehiculo
+          WHERE 1=1 AND v.estado = 'pendiente'`;
+
+      const params = [];
+
+      const [vehiculos] = await pool.query(query, params);
+      
+      // Convertir la foto BLOB a una cadena base64 para cada vehículo
+      const vehiculosConFotoBase64 = vehiculos.map(vehiculo => {
         return {
-            ...vehiculo,
-            imagen: vehiculo.imagen ? Buffer.from(vehiculo.imagen).toString('base64') : null
+          ...vehiculo,
+          foto: vehiculo.foto ? Buffer.from(vehiculo.foto).toString('base64') : null
         };
-    });
-    
-    res.json(vehiculosConImagen);    
+      });
+      
+      res.json(vehiculosConFotoBase64);
   } catch (error) {
       console.error('Error al buscar vehículos:', error);
       res.status(500).send('Error en el servidor');
   }
 });
-
-
 
 app.post('/aprobar-vehiculo/:id', authModule.verifyToken , verificarRolAdmin, async (req, res) => {
   const idVehiculo = req.params.id;

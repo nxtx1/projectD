@@ -125,7 +125,7 @@ router.get('/status', verifyToken, async (req, res) => {
     }
 });
 
-router.post('/create-post', verifyToken, upload.array('vehicleImages', 4), async (req, res) => {
+router.post('/create-post', verifyToken, upload.single('vehicleImage'), async (req, res) => {
     const userId = req.user.id; // obtenido del token JWT
     const { descripcion, kilometraje, precio, combustible, transmision, ano, modelo_id_modelo, comuna_id_comuna, numero } = req.body;
 
@@ -141,23 +141,17 @@ router.post('/create-post', verifyToken, upload.array('vehicleImages', 4), async
             return res.status(409).json({ message: 'Una publicación similar ya existe.' });
         }
 
+        // Convertir el archivo de imagen a un Buffer para insertar en la base de datos
+        let imageBuffer = null;
+        if (req.file && req.file.buffer) {
+            imageBuffer = req.file.buffer;
+        }
         // Si no hay duplicados, procede a insertar la nueva publicación, incluyendo la imagen
         const [insertResult] = await pool.query(
-            'INSERT INTO vehiculo (descripcion, kilometraje, precio, combustible, transmision, ano, usuario_id_usuario, modelo_id_modelo, comuna_id_comuna, estado, numero) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, "pendiente", ?)',
-            [descripcion, kilometraje, precio, combustible, transmision, ano, userId, modelo_id_modelo, comuna_id_comuna, numero]
+            'INSERT INTO vehiculo (descripcion, kilometraje, precio, combustible, transmision, ano, usuario_id_usuario, modelo_id_modelo, comuna_id_comuna, foto, estado, numero) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "pendiente", ?)',
+            [descripcion, kilometraje, precio, combustible, transmision, ano, userId, modelo_id_modelo, comuna_id_comuna, imageBuffer, numero]
         );
         
-        const vehiculoId = insertResult.insertId;
-
-        // Insertar imágenes en `imagenes_vehiculo`
-        if (req.files) {
-            for (const file of req.files) {
-                await pool.query(
-                    'INSERT INTO imagenes_vehiculo (id_vehiculo, imagen) VALUES (?, ?)',
-                    [vehiculoId, file.buffer]
-                );
-            }
-        }
 
     } catch (error) {
         console.error(error); // Registra el error en el log del servidor
