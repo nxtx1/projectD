@@ -10,6 +10,14 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('marca-id').innerHTML = options;
     }
 
+    document.getElementById('ano').addEventListener('input', function (e) {
+        var value = e.target.value;
+        if (value.length > 4) {
+            e.target.value = value.slice(0, 4);
+        }
+    });
+    
+
     async function cargarModelos(marcaId) {
         const response = await fetch(`/modelos/${marcaId}`);
         const modelos = await response.json();
@@ -75,9 +83,9 @@ async function enviarFormulario(event) {
     formData.append('comuna_id_comuna', document.getElementById('comuna-id').value);
     
     // Agrega la imagen
-    const imageInput = document.getElementById('vehicle-image');
-    if (imageInput.files[0]) {
-        formData.append('vehicleImage', imageInput.files[0]);
+    const imageInputs = document.getElementById('vehicle-image').files;
+    for (let i = 0; i < imageInputs.length; i++) {
+        formData.append('vehicleImages', imageInputs[i]);
     }
 
     try {

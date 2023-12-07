@@ -26,7 +26,7 @@
     <!-- Template Stylesheet -->
     <link href="/assets/css/style.css" rel="stylesheet">
     <link href="assets/css/formulariopubliarautos.css" rel="stylesheet">
-    <link href="assets/css/cssautospublicos.css" rel="stylesheet">
+    <link href="assets/css/formulario.css" rel="stylesheet">
 </head>
 
 <body>
@@ -96,8 +96,9 @@
 
         <div class="input-group">
             <label for="ano">Año:</label>
-            <input type="number" id="ano" name="ano" required>
+            <input type="text" id="ano" name="ano" required maxlength="4" pattern="\d{4}">
         </div>
+        
 
         <div class="input-group">
             <label for="transmision">Transmisión:</label>
@@ -157,6 +158,7 @@
                     <i class="fas fa-plus"></i>
                     <span>Agregar imágenes</span>
                 </div>
+                <span class="max-images-text">Máximo 4 imágenes.</span>
                 <input type="file" id="vehicle-image" name="vehicleImage" accept="image/*" class="upload-input" multiple style="display: none;" onchange="handleImageUpload(event)">
             </div>
             <div id="images-preview-container"></div>
@@ -174,6 +176,8 @@
     <div class="flex-container">
         <!-- Image Container -->
         <div class="image-container">
+            <div class="image-navigation left-arrow" onclick="navigate('prev')">&#10094;</div>
+            <div class="image-navigation right-arrow" onclick="navigate('next')">&#10095;</div>
             <img id="preview-image" src="" />
         </div>
         <!-- Details Container -->
@@ -185,6 +189,7 @@
             <p><strong>Kilometraje:</strong> <span id="preview-mileage"></span></p>
             <p><strong>Combustible:</strong> <span id="preview-fuel"></span></p>
             <p><strong>Precio:</strong> <span id="preview-price"></span></p>
+            <p><strong>Número:</strong> <span id="preview-numero"></span></p>
             <h1>Descripción</h1>
             <p><span id="preview-description"></span></p>
         </div>

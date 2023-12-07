@@ -38,6 +38,7 @@ header {
 /* Estilos de la sección de publicación de vehículos */
 
 .publish-vehicle {
+    box-sizing: border-box;
     max-height: 100%; /* Ajusta a la altura que prefieras */
     overflow-y: auto;
     background: #fff;
@@ -46,6 +47,7 @@ header {
     margin-top: 20px;
     margin-left: 10px;
     margin-bottom: 20px;;
+    margin-right: 10px;
     float: left;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 20px; /* Bordes redondeados */
@@ -148,6 +150,17 @@ button[type="submit"]:hover {
     object-fit: cover;
 }
 
+.container-detalle.vehiculo-detalle {
+    /* ... tus otros estilos ... */
+    max-width: 100%; /* Establece un ancho máximo para todo el contenedor si es necesario */
+    overflow: hidden; /* Evita que el contenido sobresalga */
+}
+
+.image-container img {
+    max-width: 100%; /* Hace que la imagen sea responsive */
+    max-height: 100%; /* Establece una altura máxima */
+    object-fit: contain; /* Asegura que la imagen se ajuste al contenedor sin distorsionarse */
+}
 
 #preview-image {
     width: 100%;
@@ -217,3 +230,130 @@ button[type="submit"]:hover {
         padding: 10px 15px;
     }
 }}
+
+@media only screen and (max-width: 1155px) {
+    .publish-vehicle {
+        width: 96%;
+    }
+}
+
+@media only screen and (max-width: 1155px) {
+    .container-detalle.vehiculo-detalle {
+        display: none; /* Esto ocultará la vista previa */
+    }
+}
+
+@media screen and (max-width: 600px) {
+    /* Estilos para pantallas menores a 600px */
+}
+
+
+@media (max-width: 991.98px) {
+    .page-header {
+        height: 300px;
+    }
+}
+@media (max-width: 576px) {
+    .carousel-caption h4 {
+        font-size: 18px;
+        font-weight: 500 !important;
+    }
+
+    .carousel-caption h1 {
+        font-size: 30px;
+        font-weight: 600 !important;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .navbar-dark .navbar-nav .nav-link  {
+        padding: 10px 15px;
+    }
+}
+
+.image-preview-item {
+    position: relative;
+    display: inline-block;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    line-height: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.image-navigation {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.5); 
+    padding: 10px;
+    border-radius: 50%;
+    user-select: none;
+}
+
+.left-arrow {
+    left: 10px;
+}
+
+.right-arrow {
+    right: 10px;
+}
+
+.left-arrow, .right-arrow {
+    display: none;
+}
+
+.image-navigation:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.image-container {
+    position: relative;
+    width: 100%;
+    max-height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+#preview-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+#preview-image {
+    object-fit: cover;
+}
+
+.max-images-text {
+    margin-left: 8px; /* Añade un poco de margen a la izquierda del texto */
+    font-size: 0.9em; /* Ajusta el tamaño de la fuente según lo necesites */
+    color: #606770; /* El color del texto, puedes ajustarlo a tu gusto */
+    display: inline-block; /* Esto alinea el texto con el botón */
+    vertical-align: middle; /* Alinea verticalmente el texto con el botón */
+}

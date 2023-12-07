@@ -100,14 +100,16 @@ function buscarVehiculos() {
   url += `marca=${marca}&modelo=${modelo}&anoInicio=${anoInicio}&anoFin=${anoFin}`;
   url += `&precioMin=${precioMin}&precioMax=${precioMax}&transmision=${transmision}`;
   url += `&combustible=${combustible}&kilometrajeMin=${kilometrajeMin}&kilometrajeMax=${kilometrajeMax}`;
-  fetch(url)
-      .then(response => response.json())
-      .then(vehiculos => {
-            const container = document.querySelector('.row');
-            container.innerHTML = ''; // Limpiar resultados anteriores
+fetch(url)
+    .then(response => response.json())
+    .then(vehiculos => {
+      const container = document.querySelector('.row');
+      container.innerHTML = ''; // Limpiar resultados anteriores
 
-            // Procesa los resultados y los añade al DOM
-            vehiculos.forEach(vehiculo => {
+      vehiculos.forEach(vehiculo => {
+        // Formatear el precio y el kilometraje
+                const precioFormateado = formatNumberWithDots(String(vehiculo.precio));
+                const kilometrajeFormateado = formatNumberWithDots(String(vehiculo.kilometraje));
                 const detalleVehiculoURL = `/vehiculo/${vehiculo.id_vehiculo}`;
               
                 let distintivoMantenimiento = '';
@@ -116,31 +118,31 @@ function buscarVehiculos() {
                 }
               
                 const vehiculoHTML = `
-                  <div class="col-lg-4 col-md-6 mb-2">
-                    <div class="rent-item mb-4">
-                      <img class="img-fluid mb-4" src="data:image/jpeg;base64,${vehiculo.foto}" alt="Foto del vehículo">
-                      ${distintivoMantenimiento}  <!-- El distintivo se muestra debajo de la imagen -->
-                      <h4 class="text-uppercase mb-4">${vehiculo.marca} ${vehiculo.modelo}</h4>
-                      <div class="d-flex justify-content-center mb-4">
-                          <div class="px-2">
-                              <i class="fa fa-car text-primary mr-1"></i>
-                              <span>${vehiculo.ano}</span>
-                          </div>
-                          <div class="px-2 border-left border-right">
-                              <i class="fa fa-cogs text-primary mr-1"></i>
-                              <span>${vehiculo.transmision === 1 ? 'Automático' : 'Mecánico'}</span>
-                          </div>
-                          <div class="px-2">
-                              <i class="fa fa-road text-primary mr-1"></i>
-                              <span>${vehiculo.kilometraje}K</span>
-                          </div>
-                      </div>
-                      <a class="btn btn-primary px-3" href="${detalleVehiculoURL}">$${vehiculo.precio}</a>
+                <div class="col-lg-4 col-md-6 mb-2">
+                  <div class="rent-item mb-4">
+                  <img class="img-fluid mb-4" src="${vehiculo.imagen ? 'data:image/jpeg;base64,' + vehiculo.imagen : 'ruta_a_imagen_por_defecto.jpg'}" alt="Foto del vehículo">
+                    ${distintivoMantenimiento}  <!-- El distintivo se muestra debajo de la imagen -->
+                    <h4 class="text-uppercase mb-4">${vehiculo.marca} ${vehiculo.modelo}</h4>
+                    <div class="d-flex justify-content-center mb-4">
+                        <div class="px-2">
+                            <i class="fa fa-car text-primary mr-1"></i>
+                            <span>${vehiculo.ano}</span>
+                        </div>
+                        <div class="px-2 border-left border-right">
+                            <i class="fa fa-cogs text-primary mr-1"></i>
+                            <span>${vehiculo.transmision === 1 ? 'Automático' : 'Mecánico'}</span>
+                        </div>
+                        <div class="px-2">
+                            <i class="fa fa-road text-primary mr-1"></i>
+                            <span>${kilometrajeFormateado}K</span>
+                        </div>
                     </div>
+                    <a class="btn btn-primary px-3" href="${detalleVehiculoURL}">$${precioFormateado}</a>
                   </div>
-                `;
-                container.innerHTML += vehiculoHTML;
-              });
-        })
-        .catch(error => console.error('Error al buscar vehículos:', error));
-} 
+                </div>
+              `;
+              container.innerHTML += vehiculoHTML;
+            });
+          })
+          .catch(error => console.error('Error al buscar vehículos:', error));
+      }

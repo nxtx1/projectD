@@ -46,17 +46,6 @@ footer {
     padding: 20px 0;
 }
 
-footer .copyright-symbol {
-    color: #F77D0A;
-}
-footer i {
-    color: #F77D0A;
-    margin-right: 5px;
-}
-footer .copyright-symbol {
-    color: #F77D0A;
-}
-
 #texto {
     display: flex;
     justify-content: space-between;
